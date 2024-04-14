@@ -11,8 +11,7 @@ const Header = () => {
     <Navbar className="border-b-2">
       <Link to={"/"} className="font-bold text-sm sm:text-lg dark:text-white">
         <span className=" bg-gradient-to-r from-indigo-500 via-blue-500 to-pink-500 text-white px-2 py-1  rounded-md">
-          {" "}
-          HR's{" "}
+          HR's
         </span>
         Blog
       </Link>
@@ -20,7 +19,7 @@ const Header = () => {
         <TextInput
           type="text"
           placeholder="search"
-          className="lg:inline hidden "
+          className="md:inline hidden "
           rightIcon={AiOutlineSearch}
         />
       </form>
