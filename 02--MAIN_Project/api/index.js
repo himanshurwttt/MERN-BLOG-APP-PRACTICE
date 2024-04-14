@@ -1,7 +1,7 @@
-import e from "express";
+import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-const app = e();
+const app = express();
 dotenv.config();
 mongoose
   .connect(process.env.MONGO)
