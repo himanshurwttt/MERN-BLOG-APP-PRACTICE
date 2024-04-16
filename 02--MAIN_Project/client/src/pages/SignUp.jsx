@@ -1,10 +1,12 @@
-import React, { useRef, useState } from "react";
-import { Button, Label } from "flowbite-react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { Alert, Button, Label, Spinner } from "flowbite-react";
+import { Link, useNavigate } from "react-router-dom";
 import { TextInput } from "flowbite-react";
 const SignUp = () => {
   const [formData, setFormData] = useState({});
-
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
     console.log(formData);
@@ -12,7 +14,19 @@ const SignUp = () => {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
+    if (
+      !formData.username ||
+      !formData.email ||
+      !formData.password ||
+      formData.username === "" ||
+      formData.email === "" ||
+      formData.password === ""
+    ) {
+      return setErrorMessage(`All feilds are Required`);
+    }
     try {
+      setLoading(false);
+      setErrorMessage(null);
       const res = await fetch("/api/auth/sign-up", {
         method: "post",
         headers: {
@@ -21,14 +35,21 @@ const SignUp = () => {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log(data);
+      if (data.success === false) {
+        setErrorMessage(data.message);
+      }
+      setLoading(false);
+      if (res.ok) {
+        navigate("/sign-in");
+      }
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
+      setLoading(false);
     }
   };
   return (
     <div className=" min-h-screen  ">
-      <div className="flex flex-col  gap-5 md:flex-row md:items-center p-3 mx-auto max-w-3xl pt-[10%]">
+      <div className="flex flex-col  gap-5 md:flex-row md:items-center p-3 mx-auto max-w-3xl pt-[8%]">
         <div className="flex-1">
           <Link to="/" className="font-bold dark:text-white text-4xl">
             <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">
@@ -52,7 +73,6 @@ const SignUp = () => {
                 type="text"
                 placeholder="username"
                 id="username"
-                // ref={username}
                 onChange={handleChange}
               />
             </div>
@@ -63,7 +83,6 @@ const SignUp = () => {
                 placeholder="name@company.com"
                 id="email"
                 type="text"
-                // ref={email}
               />
             </div>
             <div>
@@ -72,16 +91,22 @@ const SignUp = () => {
                 id="password"
                 type="text"
                 placeholder="password"
-                // ref={password}
                 onChange={handleChange}
               />
             </div>
             <Button
               gradientDuoTone="purpleToPink"
               type="submit"
-              // onClick={handleChange}
+              disabled={loading}
             >
-              Sign In
+              {loading ? (
+                <>
+                  {" "}
+                  <Spinner size="sm" /> <span>Loading..</span>
+                </>
+              ) : (
+                `Sign Up`
+              )}
             </Button>
           </form>
           <div className="flex gap-4 text-sm mt-5">
@@ -90,6 +115,11 @@ const SignUp = () => {
               Sign In
             </Link>
           </div>
+          {errorMessage && (
+            <Alert className="mt-5 " color="failure">
+              {errorMessage}
+            </Alert>
+          )}
         </div>
       </div>
     </div>
