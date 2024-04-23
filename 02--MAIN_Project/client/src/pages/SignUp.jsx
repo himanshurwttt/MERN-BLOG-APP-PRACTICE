@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { Alert, Button, Label, Spinner } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
 import { TextInput } from "flowbite-react";
@@ -49,9 +49,9 @@ const SignUp = () => {
   };
   return (
     <div className=" min-h-screen  ">
-      <div className="flex flex-col  gap-5 md:flex-row md:items-center p-3 mx-auto max-w-3xl pt-[8%]">
-        <div className="flex-1">
-          <Link to="/" className="font-bold dark:text-white text-4xl">
+      <div className="flex flex-col  gap-5 md:flex-row md:items-center p-3 mx-auto max-w-3xl sm:pt-[10%] pt-[30%] ">
+        <div className="flex-1 pb-5">
+          <Link to="/" className="font-bold dark:text-white text-4xl ">
             <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">
               Sahand's
             </span>
@@ -101,8 +101,8 @@ const SignUp = () => {
             >
               {loading ? (
                 <>
-                  {" "}
-                  <Spinner size="sm" /> <span>Loading..</span>
+                  <Spinner size="sm" />
+                  <span>Loading..</span>
                 </>
               ) : (
                 `Sign Up`
