@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Alert, Button, Label, Spinner } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
 import { TextInput } from "flowbite-react";
+import OAuth from "../components/OAuth";
+
 const SignUp = () => {
   const [formData, setFormData] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
@@ -14,6 +16,7 @@ const SignUp = () => {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
+
     if (
       !formData.username ||
       !formData.email ||
@@ -24,9 +27,11 @@ const SignUp = () => {
     ) {
       return setErrorMessage(`All feilds are Required`);
     }
+
     try {
       setLoading(false);
       setErrorMessage(null);
+
       const res = await fetch("/api/auth/sign-up", {
         method: "post",
         headers: {
@@ -34,7 +39,9 @@ const SignUp = () => {
         },
         body: JSON.stringify(formData),
       });
+
       const data = await res.json();
+
       if (data.success === false) {
         setErrorMessage(data.message);
       }
@@ -108,6 +115,7 @@ const SignUp = () => {
                 `Sign Up`
               )}
             </Button>
+            <OAuth />
           </form>
           <div className="flex gap-4 text-sm mt-5">
             <span>already have an account ?</span>

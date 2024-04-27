@@ -3,6 +3,7 @@ import { Alert, Button, Label, Spinner } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
 import { TextInput } from "flowbite-react";
 import { useDispatch, useSelector } from "react-redux";
+import OAuth from "../components/OAuth";
 import {
   signInSuccess,
   signInFailure,
@@ -11,8 +12,6 @@ import {
 
 const SignIn = () => {
   const [formData, setFormData] = useState({});
-  // const [errorMessage, setErrorMessage] = useState(null);
-  // const [loading, setLoading] = useState(false);
   const { loading, error: errorMessage } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -105,6 +104,7 @@ const SignIn = () => {
                 `Sign In`
               )}
             </Button>
+            <OAuth />
           </form>
           <div className="flex gap-4 text-sm mt-5">
             <span>Create new account ?</span>
