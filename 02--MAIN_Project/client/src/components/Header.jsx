@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 const Header = () => {
   const path = useLocation().pathname;
   const { currentUser } = useSelector((state) => state.user);
-  console.log(currentUser);
+
   return (
     <Navbar className="border-b-2">
       <Link to={"/"} className="font-bold text-sm sm:text-lg dark:text-white">
@@ -16,6 +16,7 @@ const Header = () => {
         </span>
         Blog
       </Link>
+
       <form>
         <TextInput
           type="text"
@@ -24,6 +25,7 @@ const Header = () => {
           rightIcon={AiOutlineSearch}
         />
       </form>
+
       <div className="flex gap-4 md:order-2">
         <Button color={"gray"} pill className="md:hidden ">
           <AiOutlineSearch />
@@ -64,6 +66,7 @@ const Header = () => {
 
         <Navbar.Toggle />
       </div>
+
       <Navbar.Collapse>
         <Navbar.Link as={"div"} active={path === "/"}>
           <Link to={"/"}>Home</Link>
