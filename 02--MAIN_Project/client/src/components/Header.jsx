@@ -3,11 +3,12 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaMoon } from "react-icons/fa";
 import { AiOutlineSearch } from "react-icons/ai";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleTheme } from "../redux/theme/themeSlice";
 const Header = () => {
   const path = useLocation().pathname;
   const { currentUser } = useSelector((state) => state.user);
-
+  const dispatch = useDispatch();
   return (
     <Navbar className="border-b-2">
       <Link to={"/"} className="font-bold text-sm sm:text-lg dark:text-white">
@@ -30,7 +31,12 @@ const Header = () => {
         <Button color={"gray"} pill className="md:hidden ">
           <AiOutlineSearch />
         </Button>
-        <Button color={"gray"} pill className="self-center hidden sm:inline">
+        <Button
+          color={"gray"}
+          pill
+          className="self-center hidden sm:inline"
+          onClick={() => dispatch(toggleTheme())}
+        >
           <FaMoon />
         </Button>
 
