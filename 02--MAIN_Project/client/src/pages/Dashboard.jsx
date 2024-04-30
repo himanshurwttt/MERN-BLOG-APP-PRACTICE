@@ -20,9 +20,7 @@ const Dashboard = () => {
       <div className="md:w-56">
         <DashSidebar />
       </div>
-      {/* {tab === "profile" ? <DashProfile /> : <DashSetting />} */}
       {tab === "profile" && <DashProfile />}
-      {/* {tab === "setting" && <DashSetting />} */}
     </div>
   );
 };
