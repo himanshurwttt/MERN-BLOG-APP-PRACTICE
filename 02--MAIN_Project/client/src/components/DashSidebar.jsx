@@ -23,6 +23,8 @@ const DashSidebar = () => {
               icon={HiUser}
               label={"User"}
               labelColor={"dark"}
+              as="button"
+              className="w-full"
             >
               Profile
             </Sidebar.Item>
