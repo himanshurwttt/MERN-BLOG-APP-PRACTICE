@@ -38,7 +38,7 @@ export const signUp = async (req, res, next) => {
 export const signIn = async (req, res, next) => {
   const { email, password } = req.body;
   if (!email === "" || !password === "" || !email || !password) {
-    errorHandler(404, "All fields are required");
+    next(errorHandler(404, "All fields are required"));
   }
 
   try {
@@ -57,7 +57,7 @@ export const signIn = async (req, res, next) => {
 
     res
       .status(200)
-      .cookie("acess token", token, {
+      .cookie("access_token", token, {
         httpOnly: true,
       })
       .json(rest);
