@@ -11,6 +11,7 @@ const firebaseConfig = {
   storageBucket: "mern-blog-af2d4.appspot.com",
   messagingSenderId: "664898410654",
   appId: "1:664898410654:web:db1d6e626a7258c8e2838f",
+  authorizedDomains: ["https://your-redirect-url.com"],
 };
 
 // Initialize Firebase

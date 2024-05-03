@@ -1,6 +1,6 @@
 import { Alert, Button, TextInput } from "flowbite-react";
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getDownloadURL,
   getStorage,
@@ -8,6 +8,11 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
+import {
+  updateFailure,
+  updateStart,
+  updateSuccess,
+} from "../redux/user/userSlice";
 
 const DashProfile = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -17,7 +22,8 @@ const DashProfile = () => {
   const [imageFileUploadingProgress, setimageFileUploadingProgress] =
     useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
-
+  const [formData, setFormData] = useState({});
+  const dispatch = useDispatch();
   // console.log(imageFileUploadingProgress, imageFileUploadError);
 
   const handleImageChange = (e) => {
@@ -52,33 +58,67 @@ const DashProfile = () => {
     const fileName = new Date().getTime() + imageFile.name;
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
     uploadTask.on(
       "state_changed",
+
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setimageFileUploadingProgress(progress.toFixed(0));
       },
+
       (error) => {
         setImageFileUploadError(
           `The file can't get upload ( The file size must  less then 2mb)`
         );
         setImageFile(null);
       },
+
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImageFileURL(downloadURL);
+          setFormData({ ...formData, profilePicture: downloadURL });
         });
       }
     );
   };
 
+  const handleOnChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+
+    if (Object.keys(formData).length === 0) {
+      return;
+    }
+
+    try {
+      dispatch(updateStart());
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: "put",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        dispatch(updateFailure(data.message));
+      } else {
+        dispatch(updateSuccess(data));
+      }
+    } catch (error) {
+      dispatch(updateFailure(data.error));
+    }
+  };
+  console.log(formData);
   return (
     <div className="p-3 w-full max-w-lg mx-auto">
       <h1 className="w-full text-center font-semibold my-7 text-3xl">
         Profile
       </h1>
-      <form className="flex flex-col gap-5">
+      <form className="flex flex-col gap-5" onSubmit={handleOnSubmit}>
         <input
           type="file"
           accept="image/*"
@@ -105,6 +145,7 @@ const DashProfile = () => {
           id="username"
           defaultValue={currentUser.username}
           className="text-center "
+          onChange={handleOnChange}
         />
         <TextInput
           type="email"
@@ -112,12 +153,14 @@ const DashProfile = () => {
           id="email"
           defaultValue={currentUser.email}
           className="text-center "
+          onChange={handleOnChange}
         />
         <TextInput
           type="text"
           placeholder="password"
           id="password"
           className="text-center "
+          onChange={handleOnChange}
         />
         <Button type="submit" gradientDuoTone={"purpleToBlue"} outline>
           Update
