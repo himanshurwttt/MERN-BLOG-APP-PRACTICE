@@ -22,6 +22,9 @@ const DashProfile = () => {
   const [imageFileUploadingProgress, setimageFileUploadingProgress] =
     useState(null);
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
+  const [imageUploadSuccess, setImageUploadSuccess] = useState(false);
+  const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
+  const [updateUserError, setUpdateUserError] = useState(null);
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
 
@@ -78,6 +81,7 @@ const DashProfile = () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImageFileURL(downloadURL);
           setFormData({ ...formData, profilePicture: downloadURL });
+          setImageUploadSuccess(true);
         });
       }
     );
@@ -91,10 +95,18 @@ const DashProfile = () => {
     e.preventDefault();
 
     if (Object.keys(formData).length === 0) {
+      setUpdateUserError("No update changes made");
+      return;
+    }
+
+    if (imageUploadSuccess) {
+      setUpdateUserError("Please wait for image to upload");
       return;
     }
 
     try {
+      setUpdateUserError(null);
+      setUpdateUserSuccess(null);
       dispatch(updateStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "put",
@@ -104,11 +116,16 @@ const DashProfile = () => {
       const data = await res.json();
       if (!res.ok) {
         dispatch(updateFailure(data.message));
+        setImageUploadSuccess(false);
+        setUpdateUserError(data.message);
       } else {
         dispatch(updateSuccess(data));
+        setUpdateUserSuccess("Users profile updated successfully");
       }
     } catch (error) {
       dispatch(updateFailure(data.error));
+      setImageUploadSuccess(false);
+      setUpdateUserError(error);
     }
   };
   return (
@@ -168,6 +185,16 @@ const DashProfile = () => {
         <span className="cursor-pointer">Delete Account</span>
         <span className="cursor-pointer">Sign Out</span>
       </div>
+      {updateUserSuccess && (
+        <Alert className="mt-5" color={"success"}>
+          {updateUserSuccess}
+        </Alert>
+      )}
+      {updateUserError && (
+        <Alert className="mt-5" color={"failure"}>
+          {updateUserError}
+        </Alert>
+      )}
     </div>
   );
 };
