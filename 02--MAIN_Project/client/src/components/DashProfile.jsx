@@ -24,7 +24,6 @@ const DashProfile = () => {
   const [imageFileUploadError, setImageFileUploadError] = useState(null);
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
-  // console.log(imageFileUploadingProgress, imageFileUploadError);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -112,7 +111,6 @@ const DashProfile = () => {
       dispatch(updateFailure(data.error));
     }
   };
-  console.log(formData);
   return (
     <div className="p-3 w-full max-w-lg mx-auto">
       <h1 className="w-full text-center font-semibold my-7 text-3xl">
