@@ -74,3 +74,11 @@ export const deleteUser = (req, res, next) => {
     next(error);
   }
 };
+
+export const signoutuser = (req, res, next) => {
+  try {
+    res.clearCookie("access_token").status(200).json("signout successfully");
+  } catch (error) {
+    next(error);
+  }
+};
