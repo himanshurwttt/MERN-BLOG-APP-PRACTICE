@@ -18,6 +18,7 @@ import {
   deleteUserSuccess,
   signOutSuccess,
 } from "../redux/user/userSlice";
+import { Link } from "react-router-dom";
 
 const DashProfile = () => {
   const { currentUser, error, loading } = useSelector((state) => state.user);
@@ -246,6 +247,18 @@ const DashProfile = () => {
         >
           {loading ? "Loading..." : "Update"}
         </Button>
+        {currentUser.isAdmin && (
+          <Link to={"/create-post"}>
+            <Button
+              gradientDuoTone={"purpleToPink"}
+              className="w-full"
+              type="button"
+              outline
+            >
+              Create a post
+            </Button>
+          </Link>
+        )}
       </form>
       <div className="text-red-600 flex justify-between mt-5 font-semibold">
         <span
