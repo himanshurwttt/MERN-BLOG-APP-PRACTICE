@@ -32,7 +32,7 @@ const SignUp = () => {
       setLoading(false);
       setErrorMessage(null);
 
-      const res = await fetch("/api/auth/sign-up", {
+      const res = await fetch("/api/auth/signup", {
         method: "post",
         headers: {
           "Content-Type": "application/json",
