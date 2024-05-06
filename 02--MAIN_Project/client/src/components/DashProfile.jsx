@@ -50,6 +50,13 @@ const DashProfile = () => {
   }, [imageFile]);
 
   const uploadImage = async () => {
+    setImageFileUploading(true);
+    setImageFileUploadError(false);
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + imageFile.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
     // service firebase.storage {
     //   match /b/{bucket}/o {
     //     match /{allPaths=**} {
@@ -60,12 +67,6 @@ const DashProfile = () => {
     //      }
     //   }
     // }
-    setImageFileUploading(true);
-    setImageFileUploadError(false);
-    const storage = getStorage(app);
-    const fileName = new Date().getTime() + imageFile.name;
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, imageFile);
 
     uploadTask.on(
       "state_changed",
