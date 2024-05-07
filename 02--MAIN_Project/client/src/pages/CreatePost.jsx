@@ -9,6 +9,7 @@ import {
 } from "firebase/storage";
 import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
 import { app } from "../firebase";
+
 export const CreatePost = () => {
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
@@ -22,7 +23,9 @@ export const CreatePost = () => {
         setImageUploadProgressError("Please select a file to upload");
         return;
       }
+
       setImageUploadProgressError(null);
+
       const storage = getStorage(app);
       const fileName = new Date().getTime() + "-" + file.name;
       const storageRef = ref(storage, fileName);
@@ -32,9 +35,11 @@ export const CreatePost = () => {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setImageUploadProgress(progress.toFixed(0));
       });
+
       (error) => {
         setImageUploadProgressError('image upload failed "please try again"');
       };
+
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setImageUploadProgress(null);
@@ -76,7 +81,9 @@ export const CreatePost = () => {
           <FileInput
             type="file"
             accept="image/*"
-            onChange={(e = setFile(e.target.files))}
+            onChange={(e) => {
+              setFile(e.target.files);
+            }}
           />
           <Button
             gradientDuoTone={"purpleToPink"}
