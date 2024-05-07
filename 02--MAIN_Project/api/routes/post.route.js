@@ -1,6 +1,6 @@
 import express from "express";
-import { createPost } from "../controllers/post.controller";
-import { verifyUser } from "../utils/verifyUser";
+import { createPost } from "../controllers/post.controller.js";
+import { verifyUser } from "../utils/verifyUser.js";
 
 const router = express.Router();
 
