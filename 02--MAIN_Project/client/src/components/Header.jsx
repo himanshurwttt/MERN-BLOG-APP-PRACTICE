@@ -76,7 +76,7 @@ const Header = () => {
             <Link to={"/dashboard?tab=settings"}>
               <Dropdown.Item>Settings</Dropdown.Item>
             </Link>
-            <Link to={"/sign-out"} onClick={handleSignOut}>
+            <Link onClick={handleSignOut}>
               <Dropdown.Item>Sign Out</Dropdown.Item>
             </Link>
           </Dropdown>

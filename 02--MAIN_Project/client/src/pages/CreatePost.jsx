@@ -9,6 +9,7 @@ import {
 } from "firebase/storage";
 import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
 import { app } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 export const CreatePost = () => {
   const [file, setFile] = useState(null);
@@ -16,6 +17,8 @@ export const CreatePost = () => {
   const [imageUploadProgressError, setImageUploadProgressError] =
     useState(null);
   const [formdata, setFormData] = useState({});
+  const [publishError, setPublishError] = useState(null);
+  const navigate = useNavigate();
 
   const handleUploadImage = async () => {
     try {
@@ -23,39 +26,95 @@ export const CreatePost = () => {
         setImageUploadProgressError("Please select a file to upload");
         return;
       }
-
       setImageUploadProgressError(null);
 
       const storage = getStorage(app);
       const fileName = new Date().getTime() + "-" + file.name;
+
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on("state_changed", (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setImageUploadProgress(progress.toFixed(0));
-      });
 
-      (error) => {
-        setImageUploadProgressError('image upload failed "please try again"');
-      };
-
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setImageUploadProgress(null);
-          setImageUploadProgressError(null);
-          setFormData({ ...formdata, image: downloadURL });
-        });
-      };
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setImageUploadProgress(progress.toFixed(0));
+        },
+        (error) => {
+          console.error("Upload error:", error);
+          setImageUploadProgressError('image upload failed "please try again"');
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            setImageUploadProgress(null);
+            setImageUploadProgressError(null);
+            setFormData({ ...formdata, image: downloadURL });
+          });
+        }
+      );
     } catch (error) {
+      console.error("Image upload failed:", error);
       setImageUploadProgress(null);
       setImageUploadProgressError("Image upload failed");
     }
   };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     const res = await fetch("/api/post/create", {
+  //       method: "post",
+  //       body: JSON.stringify(formdata),
+  //       headers: {
+  //         "content-type": "application/json",
+  //       },
+  //     });
+
+  //     const data = await res.json();
+  //     if (!res.ok) {
+  //       setPublishError(data.message);
+  //       return;
+  //     }
+  //     if (res.ok) {
+  //       setFormData(null);
+  //       navigate(`/post/${data.slug}`);
+  //     }
+  //   } catch (error) {
+  //     setPublishError("something went wrong");
+  //   }
+  // };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("/api/post/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formdata),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setPublishError(data.message);
+        return;
+      }
+
+      if (res.ok) {
+        setPublishError(null);
+        navigate(`/post/${data.slug}`);
+      }
+    } catch (error) {
+      setPublishError("Something went wrong");
+    }
+  };
+
   return (
     <div className="max-w-3xl min-h-screen p-3 mx-auto">
       <h1 className="my-7 font-bold text-4xl text-center">Create a Post</h1>
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 sm:flex-row justify-between">
           <TextInput
             type="text"
@@ -63,18 +122,25 @@ export const CreatePost = () => {
             id="title"
             required
             className="flex-1"
+            onChange={(e) =>
+              setFormData({ ...formdata, title: e.target.value })
+            }
           />
-          <Select>
+          <Select
+            onChange={(e) =>
+              setFormData({ ...formdata, category: e.target.value })
+            }
+          >
             <option value={"uncategorized"}>Select a category</option>
-            <option value={"categorized"}>javascript</option>
-            <option value={"categorized"}>python</option>
-            <option value={"categorized"}>react js</option>
-            <option value={"categorized"}>next js</option>
-            <option value={"categorized"}>c</option>
-            <option value={"categorized"}>c++</option>
-            <option value={"categorized"}>ruby</option>
-            <option value={"categorized"}>html</option>
-            <option value={"categorized"}>css</option>
+            <option value={"javascript"}>javascript</option>
+            <option value={"python"}>python</option>
+            <option value={"react js"}>react js</option>
+            <option value={"next js"}>next js</option>
+            <option value={"c"}>c</option>
+            <option value={"c++"}>c++</option>
+            <option value={"ruby"}>ruby</option>
+            <option value={"html"}>html</option>
+            <option value={"css"}>css</option>
           </Select>
         </div>
         <div className="flex flex-col items-center gap-4 border-teal-600 border-dotted border-4 p-3 sm:flex-row  justify-between">
@@ -82,7 +148,7 @@ export const CreatePost = () => {
             type="file"
             accept="image/*"
             onChange={(e) => {
-              setFile(e.target.files);
+              setFile(e.target.files[0]);
             }}
           />
           <Button
@@ -95,7 +161,7 @@ export const CreatePost = () => {
           </Button>
         </div>
         {imageUploadProgressError && (
-          <Alert>
+          <Alert color={"failure"}>
             <span>{imageUploadProgressError}</span>{" "}
           </Alert>
         )}
@@ -111,7 +177,10 @@ export const CreatePost = () => {
           placeholder="write something"
           className="h-64 mb-12"
           required
+          onChange={(value) => setFormData({ ...formdata, content: value })}
         />
+        {publishError && <Alert color={"failure"}>{publishError}</Alert>}
+
         <Button type="submit" gradientDuoTone={"purpleToBlue"} outline>
           {" "}
           submit
