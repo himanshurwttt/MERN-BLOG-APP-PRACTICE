@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Table, TableHead } from "flowbite-react";
+import { Button, Table, TableHead } from "flowbite-react";
 import { Link } from "react-router-dom";
 const DashPosts = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [userPost, setUserPost] = useState([{}]);
+  const [showMore, setShowMore] = useState(true);
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -12,6 +13,9 @@ const DashPosts = () => {
         const data = await res.json();
         if (res.ok) {
           setUserPost(data.posts);
+          if (data.posts.length < 9) {
+            setShowMore(false);
+          }
         }
       } catch (error) {
         return;
@@ -21,6 +25,26 @@ const DashPosts = () => {
       fetchPosts();
     }
   }, [currentUser._id]);
+
+  const handleShowMore = async () => {
+    try {
+      const startIndex = userPost.length;
+      const res = await fetch(
+        `/api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`
+      );
+      const data = await res.json();
+
+      if (res.ok) {
+        setUserPost((prev) => [...prev, ...data.posts]);
+        if (data.posts.length <= 9) {
+          setShowMore(false);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="table-auto overflow-x-scroll  scrollbar md:mx-auto p-3 scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
       {currentUser.isAdmin && userPost.length > 0 ? (
@@ -75,9 +99,19 @@ const DashPosts = () => {
               </Table.Body>
             ))}
           </Table>
+          {showMore && (
+            <div className="w-full text-center py-7">
+              <button
+                onClick={handleShowMore}
+                className="text-sm text-teal-500"
+              >
+                Show more
+              </button>
+            </div>
+          )}
         </>
       ) : (
-        <p>You have no post created yet</p>
+        <p>You have no post created yet </p>
       )}
     </div>
   );
