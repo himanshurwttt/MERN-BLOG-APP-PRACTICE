@@ -19,6 +19,7 @@ export const CreatePost = () => {
   const [formdata, setFormData] = useState({});
   const [publishError, setPublishError] = useState(null);
   const navigate = useNavigate();
+  const [deleteUploadedImage, setDeleteUploadImage] = useState(false);
 
   const handleUploadImage = async () => {
     try {
@@ -40,6 +41,7 @@ export const CreatePost = () => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           setImageUploadProgress(progress.toFixed(0));
+          setDeleteUploadImage(false);
         },
         (error) => {
           console.error("Upload error:", error);
@@ -50,41 +52,17 @@ export const CreatePost = () => {
             setImageUploadProgress(null);
             setImageUploadProgressError(null);
             setFormData({ ...formdata, image: downloadURL });
+            setDeleteUploadImage(true);
           });
         }
       );
     } catch (error) {
       console.error("Image upload failed:", error);
       setImageUploadProgress(null);
+      setDeleteUploadImage(false);
       setImageUploadProgressError("Image upload failed");
     }
   };
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     const res = await fetch("/api/post/create", {
-  //       method: "post",
-  //       body: JSON.stringify(formdata),
-  //       headers: {
-  //         "content-type": "application/json",
-  //       },
-  //     });
-
-  //     const data = await res.json();
-  //     if (!res.ok) {
-  //       setPublishError(data.message);
-  //       return;
-  //     }
-  //     if (res.ok) {
-  //       setFormData(null);
-  //       navigate(`/post/${data.slug}`);
-  //     }
-  //   } catch (error) {
-  //     setPublishError("something went wrong");
-  //   }
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -145,20 +123,35 @@ export const CreatePost = () => {
         </div>
         <div className="flex flex-col items-center gap-4 border-teal-600 border-dotted border-4 p-3 sm:flex-row  justify-between">
           <FileInput
+            className="w-full max-w-[100%] sm:max-w-[60%] "
             type="file"
             accept="image/*"
             onChange={(e) => {
               setFile(e.target.files[0]);
             }}
           />
-          <Button
-            gradientDuoTone={"purpleToPink"}
-            size={"sm"}
-            outline
-            onClick={handleUploadImage}
-          >
-            Upload Image
-          </Button>
+          <div className="flex flex-between gap-3 w-full max-w-[40%]:">
+            <Button
+              gradientDuoTone={"purpleToPink"}
+              size={"sm"}
+              outline
+              onClick={handleUploadImage}
+              disabled={imageUploadProgress}
+              className="w-full max-w-[100%] sm:max-w-[60%]"
+            >
+              {imageUploadProgress ? "Uploading..." : "Upload Image"}
+            </Button>
+            <Button
+              className="w-full max-w-[100%] sm:max-w-[60%]"
+              gradientDuoTone={"purpleToPink"}
+              size={"sm"}
+              outline
+              onClick={() => setFormData({ ...formdata, image: null })}
+              disabled={!deleteUploadedImage}
+            >
+              Delete
+            </Button>
+          </div>
         </div>
         {imageUploadProgressError && (
           <Alert color={"failure"}>
@@ -181,7 +174,12 @@ export const CreatePost = () => {
         />
         {publishError && <Alert color={"failure"}>{publishError}</Alert>}
 
-        <Button type="submit" gradientDuoTone={"purpleToBlue"} outline>
+        <Button
+          disabled={imageUploadProgress}
+          type="submit"
+          gradientDuoTone={"purpleToBlue"}
+          outline
+        >
           {" "}
           submit
         </Button>
