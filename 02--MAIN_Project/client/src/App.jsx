@@ -11,21 +11,23 @@ import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
 import { OnlyAdminPrivateRoute } from "./components/OnlyAdminPrivateRoute";
 import { CreatePost } from "./pages/CreatePost";
+import { UpdatePost } from "./pages/UpdatePost";
 const App = () => {
   return (
     <BrowserRouter>
       <Header />
       <Routes>
-        r<Route path="/" element={<Home />} />
-        r<Route path="/about" element={<About />} />
-        r<Route path="/projects" element={<Projects />} />
-        r<Route path="/sign-in" element={<SignIn />} />
-        r<Route path="/sign-up" element={<SignUp />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/sign-up" element={<SignUp />} />
         <Route element={<PrivateRoute />}>
           r<Route path="/dashboard" element={<Dashboard />} />
         </Route>
         <Route element={<OnlyAdminPrivateRoute />}>
-          r<Route path="/create-post" element={<CreatePost />} />
+          <Route path="/create-post" element={<CreatePost />} />
+          <Route path="/update-post/:postId" element={<UpdatePost />} />
         </Route>
       </Routes>
       <Footer />
