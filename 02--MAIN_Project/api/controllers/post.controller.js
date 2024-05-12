@@ -89,9 +89,9 @@ export const updatepost = async (req, res, next) => {
   if (!req.user.isAdmin || req.user.id !== req.params.userId) {
     return errorHandler(403, "You are not allowed to update this post");
   }
-
+  // console.log(req);
   try {
-    const updatePost = new Post.findByIdAndUpdate(
+    const updatePost = await Post.findByIdAndUpdate(
       req.params.postId,
       {
         $set: {

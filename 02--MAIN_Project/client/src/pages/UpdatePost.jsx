@@ -10,8 +10,9 @@ import {
 import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
 import { app } from "../firebase";
 import { useNavigate, useParams } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 export const UpdatePost = () => {
+  const { currentUser } = useSelector((state) => state.user);
   const { postId } = useParams();
   const [file, setFile] = useState(null);
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
@@ -65,31 +66,6 @@ export const UpdatePost = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch("/api/post/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formdata),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        setPublishError(data.message);
-        return;
-      }
-
-      if (res.ok) {
-        setPublishError(null);
-        navigate(`/post/${data.slug}`);
-      }
-    } catch (error) {
-      setPublishError("Something went wrong");
-    }
-  };
-
   useEffect(() => {
     try {
       const fetchPost = async () => {
@@ -112,8 +88,41 @@ export const UpdatePost = () => {
     }
   }, [postId]);
 
-  console.log(formdata);
+  console.log(formdata._id);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formdata._id) {
+      console.log(formdata._id);
+    }
+    try {
+      const res = await fetch(
+        `/api/post/updatepost/${formdata._id}/${currentUser._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formdata),
+        }
+      );
+      console.log("update START");
+      const data = await res.json();
+      if (!res.ok) {
+        setPublishError(data.message);
+        console.log("update failed");
+        return;
+      }
 
+      if (res.ok) {
+        setPublishError(null);
+        navigate(`/post/${data.slug}`);
+        console.log("update done");
+      }
+    } catch (error) {
+      setPublishError("Something went wrong");
+    }
+  };
+  // console.log(formdata);
   return (
     <div className="max-w-3xl min-h-screen p-3 mx-auto">
       <h1 className="my-7 font-bold text-4xl text-center">Update Post</h1>
