@@ -88,7 +88,6 @@ export const UpdatePost = () => {
     }
   }, [postId]);
 
-  console.log(formdata._id);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formdata._id) {
@@ -96,7 +95,7 @@ export const UpdatePost = () => {
     }
     try {
       const res = await fetch(
-        `/api/post/updatepost/${formdata._id}/${currentUser._id}`,
+        `/api/post/updatepost/${postId}/${currentUser._id}`,
         {
           method: "PUT",
           headers: {
@@ -137,7 +136,7 @@ export const UpdatePost = () => {
             onChange={(e) =>
               setFormData({ ...formdata, title: e.target.value })
             }
-            value={formdata.title || ""}
+            value={formdata.title}
           />
           <Select
             value={formdata.category}

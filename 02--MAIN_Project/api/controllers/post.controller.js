@@ -89,7 +89,6 @@ export const updatepost = async (req, res, next) => {
   if (!req.user.isAdmin || req.user.id !== req.params.userId) {
     return errorHandler(403, "You are not allowed to update this post");
   }
-  // console.log(req);
   try {
     const updatePost = await Post.findByIdAndUpdate(
       req.params.postId,
@@ -105,6 +104,6 @@ export const updatepost = async (req, res, next) => {
     );
     res.status(200).json(updatePost);
   } catch (error) {
-    return next(errorHandler(402, "somthing went wrong while updating"));
+    return next(errorHandler(402, "somthing went wrong while updating", error));
   }
 };
