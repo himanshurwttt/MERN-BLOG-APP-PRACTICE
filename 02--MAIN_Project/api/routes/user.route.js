@@ -15,5 +15,4 @@ router.put("/update/:userId", verifyUser, updateUser);
 router.delete("/delete/:userId", verifyUser, deleteUser);
 router.post("/signout", signoutuser);
 router.get("/getusers", verifyUser, getUsers);
-
 export default router;
