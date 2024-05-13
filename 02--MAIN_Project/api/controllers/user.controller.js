@@ -63,13 +63,13 @@ export const updateUser = async (req, res, next) => {
   }
 };
 
-export const deleteUser = (req, res, next) => {
+export const deleteUser = async (req, res, next) => {
   console.log(req);
-  if (req.user.id !== req.params.userId) {
-    next(errorHandler(400, "You not the allowed to delete this user"));
+  if (!req.user.isAdmin && req.user.id !== req.params.userId) {
+    return next(errorHandler(400, "You not the allowed to delete this user"));
   }
   try {
-    User.findByIdAndDelete(req.params.userId);
+    await User.findByIdAndDelete(req.params.userId);
     res.status(200).json("user has been deleted");
   } catch (error) {
     next(error);
@@ -117,14 +117,12 @@ export const getUsers = async (req, res, next) => {
       createdAt: { $gte: oneMonthAgo },
     });
 
-    res
-      .status(200)
-      .json({
-        users: userWithOutPassword,
-        totalUsers,
-        lastMonthUser,
-        oneMonthAgo,
-      });
+    res.status(200).json({
+      users: userWithOutPassword,
+      totalUsers,
+      lastMonthUser,
+      oneMonthAgo,
+    });
   } catch (error) {
     next(error);
   }
