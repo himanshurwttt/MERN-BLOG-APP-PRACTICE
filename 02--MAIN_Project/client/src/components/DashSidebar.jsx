@@ -41,7 +41,7 @@ const DashSidebar = () => {
   return (
     <Sidebar className="w-full md:w-56">
       <Sidebar.Items>
-        <Sidebar.ItemGroup className="flex sm:flex-col flex-row gap-1">
+        <Sidebar.ItemGroup className="flex sm:flex-col  flex-row justify-between gap-1">
           <Link to={"/dashboard?tab=profile"}>
             <Sidebar.Item
               active={tab === "profile"}
@@ -54,14 +54,13 @@ const DashSidebar = () => {
               Profile
             </Sidebar.Item>
           </Link>
-
           {currentUser.isAdmin && (
             <Link to={"/dashboard?tab=posts"}>
               <Sidebar.Item
                 active={tab === "posts"}
                 icon={HiDocumentText}
                 labelColor="dark"
-                as={"div"}
+                as="div"
                 className="w-full"
               >
                 Posts

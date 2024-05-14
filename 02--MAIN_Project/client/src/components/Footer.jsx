@@ -11,9 +11,9 @@ import {
 const FooterComponent = () => {
   return (
     <Footer container className="border-t-8 border-teal-500">
-      <div className="w-full max-w-full">
+      <div className=" w-full max-w-full">
         <div className="grid grid-cols-2 justify-between">
-          <div className="my-auto h-full">
+          <div className=" my-auto h-full">
             <Link
               to={"/"}
               className="font-bold text-xl sm:text-2xl dark:text-white"
