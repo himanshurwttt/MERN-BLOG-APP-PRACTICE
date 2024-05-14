@@ -12,16 +12,18 @@ import PrivateRoute from "./components/PrivateRoute";
 import { OnlyAdminPrivateRoute } from "./components/OnlyAdminPrivateRoute";
 import { CreatePost } from "./pages/CreatePost";
 import { UpdatePost } from "./pages/UpdatePost";
+import PostPage from "./pages/PostPage";
 const App = () => {
   return (
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path="/about" element={<About />} />
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/post/:postslug" element={<PostPage />} />
         <Route element={<PrivateRoute />}>
           r<Route path="/dashboard" element={<Dashboard />} />
         </Route>

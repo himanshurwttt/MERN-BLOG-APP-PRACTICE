@@ -62,7 +62,9 @@ const DashUsers = () => {
         setShowModel(false);
         console.log("user deleted", userIdToDelete);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
