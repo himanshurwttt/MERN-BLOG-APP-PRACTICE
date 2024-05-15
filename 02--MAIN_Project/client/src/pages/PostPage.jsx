@@ -61,8 +61,14 @@ export default function PostPage() {
 
       <div className="p-3 flex justify-between border-b border-slate-500 text-xs max-w-2xl mx-auto w-full">
         <span>{post && new Date(post.createdAt).toLocaleDateString()}</span>
-        <span>{post && (post.content.length / 1000).toFixed()} mins read</span>
+        <span className="italic">
+          {post && (post.content.length / 1000).toFixed()} mins read
+        </span>
       </div>
+      <div
+        dangerouslySetInnerHTML={{ __html: post && post.content }}
+        className="p-3 max-w-2xl mx-auto w-full post-content"
+      ></div>
     </main>
   );
 }

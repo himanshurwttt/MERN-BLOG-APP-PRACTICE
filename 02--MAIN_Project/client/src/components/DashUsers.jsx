@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Button, Modal, Table } from "flowbite-react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 import { FaCheck, FaTimes } from "react-icons/fa";
+
 const DashUsers = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [users, setUsers] = useState([{}]);
@@ -157,4 +158,5 @@ const DashUsers = () => {
     </div>
   );
 };
+
 export default DashUsers;
