@@ -62,13 +62,9 @@ const DashUsers = () => {
         setShowModel(false);
         console.log("user deleted", userIdToDelete);
       }
-<<<<<<< HEAD
     } catch (error) {
       console.log(error);
     }
-=======
-    } catch (error) {}
->>>>>>> refs/remotes/origin/main
   };
 
   return (
