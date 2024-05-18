@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-
+import moment from "moment";
 export default function Comment({ comment }) {
-  const [user, setUser] = useState([]);
-  console.log(user);
+  const [user, setUser] = useState({});
+  console.log("comment", comment);
+  console.log("user", user);
+
   useEffect(() => {
     const getUser = async () => {
       try {
-        const res = await `/api/user/${comment.userId}`;
+        const res = await fetch(`/api/user/${comment.userId}`);
         const data = await res.json();
         if (res.ok) {
           setUser(data);

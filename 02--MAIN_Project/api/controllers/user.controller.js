@@ -131,10 +131,10 @@ export const getUsers = async (req, res, next) => {
 export const getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.userId);
+    const { password, ...rest } = user._doc;
     if (!user) {
       return next(errorHandler(403, "User not found"));
     }
-    const { passowrd, ...rest } = passowrd._doc;
     res.status(200).json(rest);
   } catch (error) {
     next(error);

@@ -39,9 +39,9 @@ const DashSidebar = () => {
   };
 
   return (
-    <Sidebar className="w-full md:w-56">
+    <Sidebar className="w-full md:w-56 ">
       <Sidebar.Items>
-        <Sidebar.ItemGroup className="flex sm:flex-col  flex-row justify-between gap-1">
+        <Sidebar.ItemGroup className="flex sm:flex-col  flex-row justify-between  w-full gap-1">
           <Link to={"/dashboard?tab=profile"}>
             <Sidebar.Item
               active={tab === "profile"}
