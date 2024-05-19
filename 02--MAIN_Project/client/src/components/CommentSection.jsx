@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Comment from "./Comment";
+
 export default function CommentSection({ postId }) {
   const { currentUser } = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
@@ -12,11 +13,9 @@ export default function CommentSection({ postId }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (comment.length > 200) {
       return;
     }
-
     try {
       const res = await fetch("/api/comment/create", {
         method: "POST",
@@ -31,14 +30,10 @@ export default function CommentSection({ postId }) {
       });
 
       const data = await res.json();
-
-      if (!res.ok) {
-        console.log(data.message);
-      }
       if (res.ok) {
-        setComment("");
+        setComment(""); // Clear comment input
         setCommentError(null);
-        setComments([data, ...comments]);
+        setComments([data, ...comments]); // Add new comment to the list
       }
     } catch (error) {
       console.error(error);
@@ -75,21 +70,29 @@ export default function CommentSection({ postId }) {
       });
       if (res.ok) {
         const data = await res.json();
-        setComment(
-          comments.map((comment) => {
+        setComments((prevComments) =>
+          prevComments.map((comment) =>
             comment._id === commentId
               ? {
                   ...comment,
                   likes: data.likes,
                   numberOfLikes: data.likes.length,
                 }
-              : comment;
-          })
+              : comment
+          )
         );
       }
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleEdit = async (comment, editedContent) => {
+    setComments(
+      comments.map((c) =>
+        c._id === comment._id ? { ...c, content: editedContent } : c
+      )
+    );
   };
 
   return (
@@ -159,7 +162,7 @@ export default function CommentSection({ postId }) {
               key={comment._id}
               comment={comment}
               onLike={handleLike}
-              // onEdit={handleEdit}
+              onEdit={handleEdit}
               // onDelete={(commentId) => {
               //   setShowModal(true);
               //   setCommentToDelete(commentId);
