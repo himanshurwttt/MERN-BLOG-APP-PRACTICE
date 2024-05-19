@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createComment,
+  deleteComment,
   editComment,
   getPostComments,
   likeComment,
@@ -13,5 +14,6 @@ router.post("/create", verifyUser, createComment);
 router.get("/getPostComment/:postId", getPostComments);
 router.put("/likeComment/:commentId", verifyUser, likeComment);
 router.put("/editComment/:commentId", verifyUser, editComment);
+router.delete("/deleteComment/:commentId", verifyUser, deleteComment);
 
 export default router;
