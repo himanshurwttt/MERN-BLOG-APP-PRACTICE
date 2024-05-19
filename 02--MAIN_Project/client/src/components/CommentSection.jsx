@@ -3,12 +3,16 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Comment from "./Comment";
+import { Modal } from "flowbite-react";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 export default function CommentSection({ postId }) {
   const { currentUser } = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
   const [commentError, setCommentError] = useState(null);
   const [comments, setComments] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [commentToDelete, setCommentToDelete] = useState(null);
   const Navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -95,6 +99,25 @@ export default function CommentSection({ postId }) {
     );
   };
 
+  const handleDelete = async (commentId) => {
+    setShowModal(false);
+    try {
+      if (!currentUser) {
+        Navigate("/sign-in");
+        return;
+      }
+      const res = await fetch(`/api/comment/deleteComment/${commentId}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setComments(comments.filter((comment) => comment._id !== commentId));
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className="max-w-2xl mx-auto w-full p-3 ">
       {currentUser ? (
@@ -163,14 +186,41 @@ export default function CommentSection({ postId }) {
               comment={comment}
               onLike={handleLike}
               onEdit={handleEdit}
-              // onDelete={(commentId) => {
-              //   setShowModal(true);
-              //   setCommentToDelete(commentId);
-              // }}
+              onDelete={(commentId) => {
+                setShowModal(true);
+                setCommentToDelete(commentId);
+              }}
             />
           ))}
         </>
       )}
+      <Modal
+        show={showModal}
+        popup
+        size={"md"}
+        onClose={() => setShowModal(false)}
+      >
+        <Modal.Header />
+        <Modal.Body>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="w-14 h-14 mx-auto  text-gray-600 dark:text-gray-200 mb-4" />
+            <h3 className="text-lg mx-1 font-semibold mb-6 text-gray-700 dark:text-gray-300">
+              Are you sure you want to delete your comment!
+            </h3>
+            <div className="flex justify-center gap-8 my-2">
+              <Button
+                color={"success"}
+                onClick={() => handleDelete(commentToDelete)}
+              >
+                Yes i'm sure
+              </Button>
+              <Button color={"failure"} onClick={() => setShowModal(false)}>
+                No, cancel{" "}
+              </Button>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }
