@@ -18,7 +18,12 @@ export const UpdatePost = () => {
   const [imageUploadProgress, setImageUploadProgress] = useState(null);
   const [imageUploadProgressError, setImageUploadProgressError] =
     useState(null);
-  const [formdata, setFormData] = useState({});
+  const [formdata, setFormData] = useState({
+    title: "",
+    category: "uncategorized",
+    image: null,
+    content: "",
+  });
   const [publishError, setPublishError] = useState(null);
   const navigate = useNavigate();
   const [deleteUploadedImage, setDeleteUploadImage] = useState(false);
@@ -48,6 +53,7 @@ export const UpdatePost = () => {
         (error) => {
           console.error("Upload error:", error);
           setImageUploadProgressError('image upload failed "please try again"');
+          setImageUploadProgress(null);
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
@@ -171,7 +177,7 @@ export const UpdatePost = () => {
               size={"sm"}
               outline
               onClick={handleUploadImage}
-              disabled={imageUploadProgress}
+              disabled={imageUploadProgress !== null}
               className="w-full max-w-[100%] sm:max-w-[60%]"
             >
               {imageUploadProgress ? "Uploading..." : "Upload Image"}
