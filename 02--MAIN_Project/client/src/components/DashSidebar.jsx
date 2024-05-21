@@ -6,6 +6,7 @@ import {
   HiOutlineUserGroup,
   HiUser,
 } from "react-icons/hi";
+import { MdOutlineComment } from "react-icons/md";
 import { Link, useLocation } from "react-router-dom";
 import { signOutSuccess } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -84,7 +85,7 @@ const DashSidebar = () => {
             <Link to={"/dashboard?tab=comments"}>
               <Sidebar.Item
                 active={tab === "comments"}
-                icon={HiOutlineUserGroup}
+                icon={MdOutlineComment}
                 labelColor="dark"
                 as={"div"}
                 className="w-full"

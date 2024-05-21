@@ -10,7 +10,7 @@ const DashComments = () => {
   const [showMore, setShowMore] = useState(true);
   const [showModel, setShowModel] = useState(false);
   const [commentIdToDelete, setCommentIdToDelete] = useState("");
-
+  console.log(commentIdToDelete);
   useEffect(() => {
     const fetchComments = async () => {
       try {
@@ -54,9 +54,12 @@ const DashComments = () => {
   const handleDeleteComments = async () => {
     setShowModel(false);
     try {
-      const res = await fetch(`/api/comment/delete/${commentIdToDelete}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `/api/comment/deleteComment/${commentIdToDelete}`,
+        {
+          method: "DELETE",
+        }
+      );
       const data = await res.json();
       if (!res.ok) {
         console.log(data.message);
