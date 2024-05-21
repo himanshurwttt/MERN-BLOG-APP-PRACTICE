@@ -14,7 +14,7 @@ const DashComments = () => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const res = await fetch(`/api/comment/getcomments`);
+        const res = await fetch(`/api/comment/getComments`);
         const data = await res.json();
         if (res.ok) {
           setComments(data.comments);
@@ -34,7 +34,9 @@ const DashComments = () => {
   const handleShowMore = async () => {
     try {
       const startIndex = comments.length;
-      const res = await fetch(`/api/comment/getusers?startIndex=${startIndex}`);
+      const res = await fetch(
+        `/api/comment/getComments?startIndex=${startIndex}`
+      );
       const data = await res.json();
 
       if (res.ok) {
@@ -50,6 +52,7 @@ const DashComments = () => {
   };
 
   const handleDeleteComments = async () => {
+    setShowModel(false);
     try {
       const res = await fetch(`/api/comment/delete/${commentIdToDelete}`, {
         method: "DELETE",
@@ -87,18 +90,21 @@ const DashComments = () => {
             {comments.map((comment) => (
               <Table.Body key={comment._id}>
                 <Table.Row className="bg-white dark:bg-gray-700 dark:border-gray-700">
-                  <Table.Cell>
+                  <Table.Cell className="text-center">
                     {new Date(comment.updatedAt).toLocaleDateString()}
                   </Table.Cell>
-                  <Table.Cell>
-                    <img
-                      src={comment.content}
-                      alt={comment.numberOfLikes}
-                      className="w-10 h-10 object-cover rounded-full  bg-gray-500"
-                    />
+                  <Table.Cell className="text-center">
+                    {comment.content}
                   </Table.Cell>
-                  <Table.Cell>{comment.postId}</Table.Cell>
-                  <Table.Cell>{comment.userId}</Table.Cell>
+                  <Table.Cell className="text-center">
+                    {comment.numberOfLikes}
+                  </Table.Cell>
+                  <Table.Cell className="text-center">
+                    {comment.postId}
+                  </Table.Cell>
+                  <Table.Cell className="text-center">
+                    {comment.userId}
+                  </Table.Cell>
 
                   <Table.Cell>
                     <span
