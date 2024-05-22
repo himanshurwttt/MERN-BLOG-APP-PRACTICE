@@ -1,6 +1,6 @@
 import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaMoon } from "react-icons/fa";
 import { AiOutlineSearch } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +10,17 @@ const Header = () => {
   const path = useLocation().pathname;
   const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const [searchTerm, setSearchTerm] = useState("");
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromURL = urlParams.get("searchTerm");
+    if (searchTermFromURL) {
+      setSearchTerm(searchTermFromURL);
+    }
+  }, [location.search]);
 
   const handleSignOut = async () => {
     try {
@@ -25,6 +36,16 @@ const Header = () => {
       console.log(error.message);
     }
   };
+
+  const handleSearchSubmit = async (e) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("searchTerm", searchTerm);
+
+    const searchQuerry = urlParams.toString();
+    navigate(`/search?${searchQuerry}`);
+  };
+
   return (
     <Navbar className="border-b-2">
       <Link to={"/"} className="font-bold text-sm sm:text-lg dark:text-white">
@@ -34,9 +55,13 @@ const Header = () => {
         Blog
       </Link>
 
-      <form>
+      <form onSubmit={handleSearchSubmit}>
         <TextInput
           type="text"
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+          }}
           placeholder="search"
           className="md:inline hidden "
           rightIcon={AiOutlineSearch}
