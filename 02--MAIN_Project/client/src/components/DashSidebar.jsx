@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Sidebar } from "flowbite-react";
 import {
   HiArrowSmRight,
+  HiChartPie,
   HiDocumentText,
   HiOutlineUserGroup,
   HiUser,
@@ -42,12 +43,23 @@ const DashSidebar = () => {
   return (
     <Sidebar className="w-full md:w-56 ">
       <Sidebar.Items>
-        <Sidebar.ItemGroup className="flex sm:flex-col  flex-row justify-between  w-full gap-1">
+        <Sidebar.ItemGroup className="flex sm:flex-col flex-col   gap-1">
+          <Link to={"/dashboard?tab=dash"}>
+            <Sidebar.Item
+              active={tab === "dash"}
+              icon={HiChartPie}
+              labelColor={"dark"}
+              as="div"
+              className="w-full"
+            >
+              Dashboard
+            </Sidebar.Item>
+          </Link>
           <Link to={"/dashboard?tab=profile"}>
             <Sidebar.Item
               active={tab === "profile"}
               icon={HiUser}
-              label={"User"}
+              label={currentUser.isAdmin ? "Admin" : "User"}
               labelColor={"dark"}
               as="div"
               className="w-full"
