@@ -43,7 +43,7 @@ export default function Header() {
               </ul>
             </div>
             <Link to={"/signin"}>
-              <button className="border shadow-md border-white text-white w-20 h-10 rounded-lg hover:bg-white hover:text-black duration-300">
+              <button className="border active:scale-[0.9] shadow-md border-white text-white w-20 h-10 rounded-lg hover:bg-white hover:text-black duration-300">
                 sign in
               </button>
             </Link>
