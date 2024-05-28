@@ -45,10 +45,13 @@ export const signin = async (req, res, next) => {
     if (!verifyPassword) {
       return next(errorHandler(400, "user not found & Check you password"));
     }
+
+    const { password: pass, ...rest } = verifyUser._doc;
+
     res
       .status(200)
-      .cookie("access_token", token)
-      .json({ message: "signin successfully" });
+      .cookie("access_token", token, { httpOnly: true })
+      .json(rest);
   } catch (error) {
     next(error);
   }

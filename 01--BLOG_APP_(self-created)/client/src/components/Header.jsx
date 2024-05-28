@@ -2,12 +2,15 @@ import React, { useRef, useState } from "react";
 import { CgFormatJustify } from "react-icons/cg";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 export default function Header() {
   const boxRef = useRef(null);
   const { contextSafe } = useGSAP();
   const [showbox, setShowbox] = useState(false);
-
+  const location = useLocation();
+  const { currentUser } = useSelector((state) => state.user);
+  console.log(currentUser);
   const handleHamburg = contextSafe(() => {
     if (!showbox) {
       setShowbox(true);
@@ -21,7 +24,7 @@ export default function Header() {
   return (
     <>
       <nav className="w-full text-sm p-2 justify-center items-center max-w-screen-2xl mx-auto">
-        <div className="h-14 bg-blue-900 shadow-xl  border border-blue-900 rounded-2xl flex justify-between items-center">
+        <div className="h-16 bg-blue-900 shadow-xl  border border-blue-900 rounded-2xl flex justify-between items-center">
           <div className="left">
             <Link to={"/"}>
               <div className="logo px-5 font-bold text-white ">BLOGS</div>
@@ -42,14 +45,31 @@ export default function Header() {
                 </li>
               </ul>
             </div>
-            <Link to={"/signin"}>
-              <button className="border active:scale-[0.9] shadow-md border-white text-white w-20 h-10 rounded-lg hover:bg-white hover:text-black duration-300">
-                sign in
-              </button>
-            </Link>
+            {currentUser ? (
+              <div className="w-10 h-10 mx-2 rounded-full bg-red-400">
+                <img
+                  className="rounded-full object-cover"
+                  src={currentUser.profilePicture}
+                  alt={currentUser.username}
+                />
+              </div>
+            ) : location.pathname === "/signin" ? (
+              <Link to={"/signup"}>
+                <button className="border active:scale-[0.9] shadow-md border-white text-white w-20 h-10 rounded-lg md:hover:bg-white md:hover:text-black duration-300">
+                  sign up
+                </button>
+              </Link>
+            ) : (
+              <Link to={"/signin"}>
+                <button className="border active:scale-[0.9] shadow-md border-white text-white w-20 h-10 rounded-lg md:hover:bg-white md:hover:text-black duration-300">
+                  sign in
+                </button>
+              </Link>
+            )}
+
             <div className="md:hidden">
               <button
-                className="border p-1 rounded-full w-10 h-10 flex justify-center items-center text-white hover:bg-white hover:text-black duration-300"
+                className="border p-1 rounded-full active:scale-[0.9] w-10 h-10 flex justify-center items-center text-white md:hover:bg-white md:hover:text-black duration-300"
                 onClick={handleHamburg}
               >
                 <CgFormatJustify className="w-6 h-6 " />
