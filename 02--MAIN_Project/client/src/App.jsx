@@ -29,7 +29,7 @@ const App = () => {
         <Route path="/search" element={<Search />} />
         <Route path="/post/:postslug" element={<PostPage />} />
         <Route element={<PrivateRoute />}>
-          r<Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Route>
         <Route element={<OnlyAdminPrivateRoute />}>
           <Route path="/create-post" element={<CreatePost />} />
