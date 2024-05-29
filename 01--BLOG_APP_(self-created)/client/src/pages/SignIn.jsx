@@ -10,6 +10,7 @@ import {
 } from "../redux/user/userSlice";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { current } from "@reduxjs/toolkit";
 const SignIn = () => {
   const [type, setType] = useState("password");
   const [formData, setFormData] = useState({});
@@ -17,6 +18,7 @@ const SignIn = () => {
   const dispatch = useDispatch();
   const boxRef = useRef();
   const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
   const handleOnChnage = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -62,7 +64,7 @@ const SignIn = () => {
       scale: 0.9,
       duration: 0.2,
     });
-  }, [boxRef.current]);
+  }, []);
 
   return (
     <div className="w-full h-[92vh]">

@@ -70,7 +70,7 @@ const SignUp = () => {
       scale: 0.9,
       duration: 0.2,
     });
-  }, [boxRef.current]);
+  }, []);
 
   return (
     <div className="w-full h-[90vh] md:h-[100vh]">
