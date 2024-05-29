@@ -10,7 +10,6 @@ export default function Header() {
   const [showbox, setShowbox] = useState(false);
   const location = useLocation();
   const { currentUser } = useSelector((state) => state.user);
-  console.log(currentUser);
   const handleHamburg = contextSafe(() => {
     if (!showbox) {
       setShowbox(true);

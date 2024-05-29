@@ -16,6 +16,11 @@ export const signup = async (req, res, next) => {
     return next(errorHandler(400, "all fields are required"));
   }
 
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    next(errorHandler(402, "User already exist , please login"));
+  }
+
   const hashedPassword = bcryptjs.hashSync(password, 10);
   const newUser = new User({
     username,
@@ -25,7 +30,11 @@ export const signup = async (req, res, next) => {
 
   try {
     await newUser.save();
-    res.status(200).json({ message: "signup successfull" });
+
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_TOKEN_KEY, {
+      expiresIn: "5d",
+    });
+    res.status(200).cookie("access_token", token).json(newUser);
   } catch (error) {
     next(error);
   }

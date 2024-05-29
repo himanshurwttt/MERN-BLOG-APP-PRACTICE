@@ -5,9 +5,9 @@ import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 import { FcGoogle } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  signInStart,
-  signInSuccess,
-  signInFailure,
+  signUpStart,
+  signUpSuccess,
+  signUpFailure,
 } from "../redux/user/userSlice";
 import gsap from "gsap";
 const SignUp = () => {
@@ -17,6 +17,9 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const boxRef = useRef();
   const navigate = useNavigate();
+
+  const { currentUser } = useSelector((state) => state.user);
+
   const handleOnChnage = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -34,7 +37,7 @@ const SignUp = () => {
       setFormError("All Fields are required");
     }
     try {
-      dispatch(signInStart());
+      dispatch(signUpStart());
       const res = await fetch("/api/auth/signup", {
         method: "POST",
         headers: {
@@ -43,23 +46,26 @@ const SignUp = () => {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log(data);
       if (res.ok) {
         navigate("/");
+        localStorage.setItem("token", data.token);
         setFormError(null);
-        dispatch(signInSuccess(data));
+        dispatch(signUpSuccess(data));
+        dispatch(signUpFailure(null));
         console.log(data);
+        console.log(currentUser);
       } else {
         setFormError(data.message || "An unknown error occurred.");
-        dispatch(signInFailure(data.message || "An unknown error occurred."));
+        dispatch(signUpFailure(data.message || "An unknown error occurred."));
       }
     } catch (error) {
-      dispatch(signInFailure(error.message));
+      dispatch(signUpFailure(error.message));
       setFormError(error.message);
     }
   };
 
   useGSAP(() => {
+    gsap.set(boxRef.current, { scale: 1, duration: 0 });
     gsap.from(boxRef.current, {
       scale: 0.9,
       duration: 0.2,
@@ -68,7 +74,7 @@ const SignUp = () => {
 
   return (
     <div className="w-full h-[90vh] md:h-[100vh]">
-      <div className=" w-full h-full p-4 px-10 sm:py-5 py-16 ">
+      <div className=" w-full h-full p-4 px-10 py-12 sm:py-5  ">
         <h1 className="text-6xl mb-3 text-center font-bold">BLOGS</h1>
         <div
           ref={boxRef}
