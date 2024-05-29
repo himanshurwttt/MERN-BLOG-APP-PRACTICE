@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
 import { FcGoogle } from "react-icons/fc";
@@ -8,12 +8,14 @@ import {
   signInSuccess,
   signInFailure,
 } from "../redux/user/userSlice";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 const SignIn = () => {
   const [type, setType] = useState("password");
   const [formData, setFormData] = useState({});
   const [formError, setFormError] = useState(null);
   const dispatch = useDispatch();
-
+  const boxRef = useRef();
   const navigate = useNavigate();
   const handleOnChnage = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -55,11 +57,18 @@ const SignIn = () => {
     }
   };
 
+  useGSAP(() => {
+    gsap.from(boxRef.current, {
+      scale: 0.9,
+      duration: 0.2,
+    });
+  }, [boxRef.current]);
+
   return (
     <div className="w-full h-[92vh]">
       <div className=" w-full h-full p-4 px-10 sm:py-5 py-16 ">
         <h1 className="text-6xl text-center font-bold">BLOGS</h1>
-        <div className="flex justify-around  max-w-4xl mx-auto ">
+        <div ref={boxRef} className="flex justify-around  max-w-4xl mx-auto ">
           <div className="box w-full sm:w-[50%]">
             <form
               onSubmit={handleSubmit}
@@ -75,6 +84,7 @@ const SignIn = () => {
                   onChange={handleOnChnage}
                   className="rounded-md px-4 drop-shadow-md  p-[0.35rem]"
                   placeholder="abc@xyz.com"
+                  autoComplete="off"
                 />
               </div>
               <div className="flex flex-col gap-3 drop-shadow-md">
