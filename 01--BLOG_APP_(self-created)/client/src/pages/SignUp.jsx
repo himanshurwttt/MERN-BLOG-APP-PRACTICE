@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useGSAP } from "@gsap/react";
 import { BiSolidHide, BiSolidShow } from "react-icons/bi";
@@ -10,6 +10,12 @@ import {
   signUpFailure,
 } from "../redux/user/userSlice";
 import gsap from "gsap";
+import { auth, provider } from "../firebase"; // Import from your firebase.js file
+import {
+  signInWithRedirect,
+  getRedirectResult,
+  GoogleAuthProvider,
+} from "firebase/auth";
 const SignUp = () => {
   const [type, setType] = useState("password");
   const [formData, setFormData] = useState({});
@@ -17,7 +23,7 @@ const SignUp = () => {
   const dispatch = useDispatch();
   const boxRef = useRef();
   const navigate = useNavigate();
-
+  const [signInProcess, setSignInProcess] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
 
   const handleOnChnage = (e) => {
@@ -72,6 +78,58 @@ const SignUp = () => {
     });
   }, []);
 
+  const handleGoogleLogin = async () => {
+    try {
+      await signInWithRedirect(auth, provider);
+    } catch (error) {
+      console.error("Error during sign-in redirect:", error);
+    }
+  };
+
+  const fetchUserData = async (user) => {
+    setSignInProcess(true);
+    try {
+      const response = await fetch("/api/auth/google", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: user.displayName,
+          email: user.email,
+        }),
+      });
+
+      if (!response.ok) {
+        setSignInProcess(false);
+        throw new Error("Failed to send user data");
+      }
+      const data = await response.json();
+      if (response.ok) {
+        // Check if the response contains a user ID
+        console.log(data);
+        dispatch(signUpSuccess(data)); // Assuming signUpSuccess handles both existing and new users
+        navigate("/");
+        signInProcess(false);
+      }
+    } catch (error) {
+      setSignInProcess(false);
+      console.error("Error sending user data:", error);
+    }
+  };
+
+  useEffect(() => {
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result) {
+          const user = result.user;
+          fetchUserData(user);
+        }
+      })
+      .catch((error) => {
+        console.error("Error getting redirect result:", error);
+      });
+  }, [navigate, dispatch]);
   return (
     <div className="w-full h-[90vh] md:h-[100vh]">
       <div className=" w-full h-full p-4 px-10 py-12 sm:py-5  ">
@@ -137,13 +195,18 @@ const SignUp = () => {
               </div>
               <div className="btns mt-4 flex flex-col gap-3">
                 <button
+                  disabled={signInProcess}
                   type="submit"
                   onClick={handleSubmit}
                   className="border active:scale-[0.9] h-10 rounded-xl bg-blue-600 text-white shadow-xl  duration-200"
                 >
                   submit
                 </button>
-                <button className="border h-10 active:scale-[0.9]  rounded-xl bg-blue-200 border-blue-200 shadow-lg duration-200 flex items-center justify-center gap-1 text-sm ">
+                <button
+                  disabled={signInProcess}
+                  onClick={handleGoogleLogin}
+                  className="border h-10 active:scale-[0.9]  rounded-xl bg-blue-200 border-blue-200 shadow-lg duration-200 flex items-center justify-center gap-1 text-sm "
+                >
                   <FcGoogle className="w-6 h-6" />
                   <p> signup with google</p>
                 </button>

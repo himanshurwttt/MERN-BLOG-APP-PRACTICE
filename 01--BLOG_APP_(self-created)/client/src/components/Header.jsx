@@ -72,13 +72,20 @@ export default function Header() {
       if (res.ok) {
         dispatch(signOutSuccess());
         navigate("/");
+        setShowdashBox(false);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleProfileBox = () => {
+    setShowdashBox(false);
   };
 
   return (
     <>
-      <nav className="w-full text-sm p-2 justify-center items-center max-w-screen-2xl mx-auto">
+      <nav className="w-full text-sm p-1 justify-center items-center max-w-screen-2xl mx-auto">
         <div className="h-16 bg-blue-900 shadow-2xl border border-blue-900 rounded-2xl flex justify-between items-center ">
           <div className="left">
             <Link to={"/"}>
@@ -89,15 +96,20 @@ export default function Header() {
           <div className="right flex gap-2 px-2 sm:px-6 relative items-center">
             <div className="hidden md:flex">
               <ul className="flex gap-10 text-white font-sans mx-5">
-                <li>
-                  <Link to={"/"}>Home</Link>
-                </li>
-                <li>
-                  <Link to={"/about"}>About</Link>
-                </li>
-                <li>
-                  <Link to={"/profile"}>Profile</Link>
-                </li>
+                {/* <li> */}
+                <Link to={"/"}>Home</Link>
+                {/* </li> */}
+                {/* <li> */}
+                <Link to={"/about"}>About</Link>
+                {/* </li> */}
+                {/* <li> */}
+                <Link to={"/posts"}>posts</Link>
+                {/* </li> */}
+                {/* <li> */}
+                {currentUser && (
+                  <Link to={"/dashboard?tab=profile"}>Profile</Link>
+                )}
+                {/* </li> */}
               </ul>
             </div>
             {location.pathname === "/signin" || location.pathname === "/signup"
@@ -122,18 +134,30 @@ export default function Header() {
                           </p>
                         </div>
                         <div className="flex flex-col text-xs font-semibold gap-1">
-                          <p className="p-1 py-2 rounded-md hover:bg-white hover:text-black duration-200">
-                            <Link>Dashboard</Link>
-                          </p>
-                          <p className="p-1 py-2 rounded-md hover:bg-white hover:text-black duration-200">
-                            <Link>Posts</Link>
-                          </p>
-                          <p
-                            onClick={handleSignOut}
-                            className="p-1 py-2 rounded-md hover:bg-white hover:text-black duration-200"
-                          >
-                            <Link>sign out</Link>
-                          </p>
+                          <Link to={"/dashboard?tab=dashboardComp"}>
+                            <p
+                              onClick={handleProfileBox}
+                              className="p-1 py-2 rounded-md hover:bg-white hover:text-black duration-200"
+                            >
+                              Dashboard
+                            </p>
+                          </Link>
+                          <Link to={"/dashboard?tab=posts"}>
+                            <p
+                              onClick={handleProfileBox}
+                              className="p-1 py-2 rounded-md hover:bg-white hover:text-black duration-200"
+                            >
+                              Posts
+                            </p>
+                          </Link>
+                          <Link>
+                            <p
+                              onClick={handleSignOut}
+                              className="p-1 py-2 rounded-md hover:bg-white hover:text-black duration-200"
+                            >
+                              sign out
+                            </p>
+                          </Link>
                         </div>
                       </div>
                     ) : (
@@ -168,7 +192,7 @@ export default function Header() {
               {showbox && (
                 <ul
                   ref={boxRef}
-                  className="absolute flex right-0 top-12 mt-4 rounded-2xl bg-blue-900 text-white text-lg w-28 h-36 px-2 justify-between items-center gap-2 p-1 flex-col"
+                  className="absolute flex right-0 top-12 mt-4 rounded-2xl bg-blue-900 text-white text-lg w-28 min-h-9 px-2  items-center gap-2 p-1 flex-col"
                 >
                   <li onClick={handleLinkShow} className="p-1">
                     <Link to={"/"}>Home</Link>
@@ -176,9 +200,11 @@ export default function Header() {
                   <li onClick={handleLinkShow} className="p-1">
                     <Link to={"/about"}>About</Link>
                   </li>
-                  <li onClick={handleLinkShow} className="p-1">
-                    <Link to={"/profile"}>Profile</Link>
-                  </li>
+                  {currentUser && (
+                    <li onClick={handleLinkShow} className="p-1">
+                      <Link to={"/dashboard?tab=profile"}>Profile</Link>
+                    </li>
+                  )}
                 </ul>
               )}
             </div>

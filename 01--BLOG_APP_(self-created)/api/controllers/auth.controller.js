@@ -66,6 +66,68 @@ export const signin = async (req, res, next) => {
   }
 };
 
+export const google = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    // Try to find an existing user
+    const existedUser = await User.findOne({ email });
+    if (existedUser) {
+      // User exists, prepare the response
+      const { password, ...rest } = existedUser._doc;
+      const token = jwt.sign({ email }, process.env.JWT_TOKEN_KEY, {
+        expiresIn: "2d",
+      });
+      await res.status(200).cookie("access_token", token).json(rest); // Send user data directly
+    } else {
+      // No user found, create a new user
+      const generateRandomUsername = (email) => {
+        const prefix = email.split("@")[0];
+        const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+        return `${prefix}${randomSuffix}`;
+      };
+
+      // Function to generate a random password
+      const generateRandomPassword = () => {
+        const chars =
+          "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()_+[]{}|;:,.<>?";
+        let password = "";
+        for (let i = 0; i < 12; i++) {
+          const randomIndex = Math.floor(Math.random() * chars.length);
+          password += chars[randomIndex];
+        }
+        return password;
+      };
+
+      const username = generateRandomUsername(email);
+      const randpassword = generateRandomPassword();
+      const hashedPassword = await bcryptjs.hash(randpassword, 10);
+      const newUser = new User({
+        email,
+        username: username,
+        password: hashedPassword,
+        profilePicture:
+          "https://imgs.search.brave.com/bIkpHw6cWZRHzdOnYK7TnI67_uqVzpREf0V0pQWu_pw/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzL2RkL2Yw/LzExL2RkZjAxMTBh/YTE5ZjQ0NTY4N2I3/Mzc2NzllZWM5Y2Iy/LmpwZw", // Set a default value or handle dynamically
+        isAdmin: false,
+      });
+
+      // Save the new user to the database
+      await newUser.save();
+
+      // Prepare the response for the new user
+      const token = jwt.sign({ email }, process.env.JWT_TOKEN_KEY, {
+        expiresIn: "2d",
+      });
+      const { password, ...rest } = newUser._doc;
+
+      await res.status(200).cookie("access_token", token).json(rest); // Send user data directly
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("An error occurred");
+  }
+};
+
 export const signout = async (req, res, next) => {
   try {
     res
