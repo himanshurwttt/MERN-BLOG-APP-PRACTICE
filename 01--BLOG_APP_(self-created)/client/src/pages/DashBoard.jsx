@@ -7,6 +7,7 @@ import DashSideBar from "../components/DashSideBar";
 import { useSelector } from "react-redux";
 import DashComp from "../components/DashComp";
 import DashUsers from "../components/DashUsers";
+import UpdateProfile from "../components/UpdateProfile";
 
 export default function DashBoard() {
   const { currentUser } = useSelector((state) => state.user);
@@ -31,7 +32,7 @@ export default function DashBoard() {
           {tab === "posts" && <DashPosts />}
           {tab === "comments" && <DashComments />}
           {tab === "users" && <DashUsers />}
-          {/* {tab === "profile" && <DashProfile />} */}
+          {tab === "updateprofile" && <UpdateProfile />}
           <div className="md:max-w-64  md:min-w-60 drop-shadow-2xl pt-0 pb-1">
             {/* Sidebar */}
             <DashSideBar />
