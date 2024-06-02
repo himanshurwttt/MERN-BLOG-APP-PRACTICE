@@ -21,6 +21,14 @@ mongoose
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Log the error stack trace
+  res.status(err.statusCode || 500).send({
+    message: err.message,
+    statusCode: err.statusCode || 500,
+  });
+});
+
 app.listen(3000, () => {
   console.log("server is successfully connected");
 });

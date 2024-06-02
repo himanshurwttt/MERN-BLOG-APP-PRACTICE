@@ -1,31 +1,32 @@
 import User from "../models/user.model.js";
 import errorHandler from "../utils/error.js";
 
-export const test = (req, res, next) => {
+export const test = async (req, res, next) => {
   console.log("successfully done");
+  const user = await User.findById({ _id: "665c125bd9addc9e76dcf535" });
+  console.log(user);
 };
 
 export const updateUser = async (req, res, next) => {
-  const { username, bio } = req.body;
-  const userId = req.params.userId;
-  const user = await User.findById(userId);
-  console.log("user", user);
-  console.log("userId", userId);
-  console.log("params", req.params.userId);
-  if (!user._id) {
-    return next(errorHandler(403, "User Not Match"));
+  const user = await User.findById(req.params.userId);
+  if (user._id !== req.user.id) {
+    return next(errorHandler(403, "You are not allowed to update this user"));
   }
 
   try {
-    const updateUser = await User.findByIdAndUpdate(
-      userId,
-      { $set: { username, bio } },
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.userId,
+      {
+        $set: {
+          username: req.body.username,
+          bio: req.body.bio,
+        },
+      },
       { new: true }
     );
 
-    res.status(200).json(updateUser);
-
-    // await new User.save();
+    const { password, ...rest } = updatedUser._doc;
+    res.status(200).json(rest);
   } catch (error) {
     return next(error);
   }

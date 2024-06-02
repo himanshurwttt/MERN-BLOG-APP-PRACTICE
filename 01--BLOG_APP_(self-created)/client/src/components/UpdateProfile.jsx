@@ -23,24 +23,27 @@ export default function UpdateProfile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!username || username == "") {
-      setFormError("username Field is empty");
+      setFormError("username field can't be empty");
+      return;
     }
-    const res = await fetch(`/api/user/updateuser/${currentUser._id}`, {
-      method: "PUT",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify({
-        username: username,
-        bio: bio,
-      }),
-    });
-    const data = await res.json();
-    if (res.ok) {
-      dispatch(updateUserSuccess(data));
-      navigate("/dashboard?tab=profile");
-      setFormError(null);
-    }
-    if (!res.ok) {
-      setFormError(data.message);
+    try {
+      const res = await fetch(`/api/user/updateUser/${currentUser._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, bio }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setFormError(data.message);
+      } else {
+        dispatch(updateUserSuccess(data));
+        setFormError(null);
+        navigate("/dashboard?tab=profile");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
