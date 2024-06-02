@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUserSuccess } from "../redux/user/userSlice";
 import { useNavigate } from "react-router-dom";
+import { storage } from "../firebase";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 export default function UpdateProfile() {
   const { currentUser } = useSelector((state) => state.user);
   const [username, setUsername] = useState(currentUser.username);
@@ -10,6 +12,18 @@ export default function UpdateProfile() {
   const [formError, setFormError] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState(currentUser.profilePicture);
+  const [userData, setUserData] = useState({ username: "", bio: "" });
+  const imagePickRef = useRef();
+  const [progress, setProgress] = useState(0);
+
+  const handleImageChange = (e) => {
+    if (e.target.files[0]) {
+      setImage(e.target.files[0]);
+      setImageUrl(URL.createObjectURL(e.target.files[0]));
+    }
+  };
 
   const handleUserNameChnage = (e) => {
     const value = e.target.value;
@@ -20,6 +34,40 @@ export default function UpdateProfile() {
     setBioLength(e.target.value);
   };
 
+  const handleImageUpload = () => {
+    return new Promise((resolve, reject) => {
+      if (image) {
+        const storageRef = ref(storage, `images/${image.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, image);
+
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progess =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setProgress(progess);
+            console.log(progess);
+          },
+          (error) => {
+            console.error("Upload error :", error);
+            reject(error);
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref)
+              .then((url) => {
+                resolve(url);
+              })
+              .catch((error) => {
+                reject(error);
+              });
+          }
+        );
+      } else {
+        resolve(currentUser.profilePicture);
+      }
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!username || username == "") {
@@ -27,12 +75,13 @@ export default function UpdateProfile() {
       return;
     }
     try {
+      const profilePicture = await handleImageUpload();
       const res = await fetch(`/api/user/updateUser/${currentUser._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, bio }),
+        body: JSON.stringify({ username, bio, profilePicture }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -55,13 +104,19 @@ export default function UpdateProfile() {
             Update Profile
           </h1>
           <div className="img rounded-full my-5 flex justify-center items-center ">
-            {currentUser.profilePicture && (
-              <img
-                src={currentUser.profilePicture}
-                alt={currentUser.username}
-                className="rounded-full w-32 h-32 border-blue-900 border-[5px] object-cover cursor-pointer"
-              />
-            )}
+            <input
+              type="file"
+              accept="image/*"
+              ref={imagePickRef}
+              onChange={handleImageChange}
+              hidden
+            />
+            <img
+              onClick={() => imagePickRef.current.click()}
+              src={imageUrl}
+              alt={currentUser.username}
+              className="rounded-full w-32 h-32 border-blue-900 border-[5px] object-cover cursor-pointer"
+            />
           </div>
           <div className="inputs flex flex-col gap-5 my-10">
             <div className=" flex flex-col gap-5 md:flex-row">

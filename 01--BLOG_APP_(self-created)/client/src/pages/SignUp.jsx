@@ -24,7 +24,7 @@ const SignUp = () => {
   const boxRef = useRef();
   const navigate = useNavigate();
   const [signInProcess, setSignInProcess] = useState(false);
-  const { currentUser } = useSelector((state) => state.user);
+  const { loading, error, currentUser } = useSelector((state) => state.user);
 
   const handleOnChnage = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -57,9 +57,6 @@ const SignUp = () => {
         localStorage.setItem("token", data.token);
         setFormError(null);
         dispatch(signUpSuccess(data));
-        dispatch(signUpFailure(null));
-        console.log(data);
-        console.log(currentUser);
       } else {
         setFormError(data.message || "An unknown error occurred.");
         dispatch(signUpFailure(data.message || "An unknown error occurred."));
@@ -130,6 +127,7 @@ const SignUp = () => {
         console.error("Error getting redirect result:", error);
       });
   }, [navigate, dispatch]);
+
   return (
     <div className="w-full h-[90vh] md:h-[100vh]">
       <div className=" w-full h-full p-4 px-10 py-12 sm:py-5  ">
@@ -195,7 +193,7 @@ const SignUp = () => {
               </div>
               <div className="btns mt-4 flex flex-col gap-3">
                 <button
-                  disabled={signInProcess}
+                  disabled={signInProcess || loading}
                   type="submit"
                   onClick={handleSubmit}
                   className="border active:scale-[0.9] h-10 rounded-xl bg-blue-600 text-white shadow-xl  duration-200"
@@ -203,7 +201,7 @@ const SignUp = () => {
                   submit
                 </button>
                 <button
-                  disabled={signInProcess}
+                  disabled={signInProcess || loading}
                   onClick={handleGoogleLogin}
                   className="border h-10 active:scale-[0.9]  rounded-xl bg-blue-200 border-blue-200 shadow-lg duration-200 flex items-center justify-center gap-1 text-sm "
                 >

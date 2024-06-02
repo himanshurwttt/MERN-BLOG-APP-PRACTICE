@@ -9,7 +9,10 @@ export const test = async (req, res, next) => {
 
 export const updateUser = async (req, res, next) => {
   const user = await User.findById(req.params.userId);
-  if (user._id !== req.user.id) {
+  const User2 = await User.findOne({ email: req.user.email });
+  console.log(User2._id);
+  console.log(user._id);
+  if (user._id.toString() !== User2._id.toString()) {
     return next(errorHandler(403, "You are not allowed to update this user"));
   }
 
@@ -20,6 +23,7 @@ export const updateUser = async (req, res, next) => {
         $set: {
           username: req.body.username,
           bio: req.body.bio,
+          profilePicture: req.body.profilePicture,
         },
       },
       { new: true }
