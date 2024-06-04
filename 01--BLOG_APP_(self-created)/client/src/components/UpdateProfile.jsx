@@ -17,7 +17,7 @@ export default function UpdateProfile() {
   const [userData, setUserData] = useState({ username: "", bio: "" });
   const imagePickRef = useRef();
   const [progress, setProgress] = useState(0);
-
+  const [updateProcess, setUpdateProcess] = useState(false);
   const handleImageChange = (e) => {
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
@@ -46,7 +46,6 @@ export default function UpdateProfile() {
             const progess =
               (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             setProgress(progess);
-            console.log(progess);
           },
           (error) => {
             console.error("Upload error :", error);
@@ -70,6 +69,7 @@ export default function UpdateProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setUpdateProcess(true);
     if (!username || username == "") {
       setFormError("username field can't be empty");
       return;
@@ -86,19 +86,22 @@ export default function UpdateProfile() {
       const data = await res.json();
       if (!res.ok) {
         setFormError(data.message);
+        setUpdateProcess(false);
       } else {
         dispatch(updateUserSuccess(data));
         setFormError(null);
         navigate("/dashboard?tab=profile");
+        setUpdateProcess(false);
       }
     } catch (error) {
+      setUpdateProcess(false);
       console.log(error);
     }
   };
 
   return (
     <div className="w-full ">
-      <div className="w-full  h-full  flex justify-center ">
+      <div className="w-full  h-[82vh] sm:h-full flex justify-center ">
         <form onSubmit={handleSubmit} className="box w-full p-2 md:w-[70%]">
           <h1 className="font-semibold text-4xl text-center uppercase underline text-gray-600">
             Update Profile
@@ -163,8 +166,11 @@ export default function UpdateProfile() {
           </div>
           <div className="buttons flex flex-col md:flex-row gap-5">
             <div className="update w-full">
-              <button className="w-full  font-semibold text-white bg-blue-800 p-3 shadow-lg rounded-full active:scale-[0.95] duration-100 drop-shadow-xl focus:outline-none">
-                Update
+              <button
+                disabled={updateProcess}
+                className="w-full  font-semibold text-white bg-blue-800 p-3 shadow-lg rounded-full active:scale-[0.98   ] duration-100 drop-shadow-xl focus:outline-none"
+              >
+                {updateProcess ? "Updating...." : "Update"}
               </button>
             </div>
           </div>

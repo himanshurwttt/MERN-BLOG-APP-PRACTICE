@@ -9,6 +9,8 @@ import About from "./pages/About";
 import DashBoard from "./pages/DashBoard";
 import PrivateRoute from "./components/PrivateRoute";
 import AllPosts from "./pages/AllPosts";
+import OnlyAdminPrivateRoute from "./components/OnlyAdminPrivateRoute";
+import CreatePost from "./pages/CreatePost";
 const App = () => {
   return (
     <BrowserRouter>
@@ -22,8 +24,11 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard" element={<DashBoard />} />
         </Route>
+        <Route element={<OnlyAdminPrivateRoute />}>
+          <Route path="/createpost" element={<CreatePost />} />
+        </Route>
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </BrowserRouter>
   );
 };

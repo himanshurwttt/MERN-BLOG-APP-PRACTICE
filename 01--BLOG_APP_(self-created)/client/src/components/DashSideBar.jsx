@@ -1,15 +1,15 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { signOutSuccess } from "../redux/user/userSlice";
 
 export default function Component() {
+  const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const handleSignOut = async () => {
     try {
       const res = await fetch("/api/auth/signout", {
         method: "POST",
       });
-      const data = await res.json();
       if (res.ok) {
         dispatch(signOutSuccess());
         navigate("/");
@@ -40,6 +40,18 @@ export default function Component() {
               <span className="hidden md:inline">dashboard</span>
             </Link>
           </li>
+          {currentUser.isAdmin == true && (
+            <li>
+              <Link
+                className="flex items-center gap-3 px-4 py-2 text-sm font-medium hover:bg-blue-800 active:bg-blue-700 rounded-lg w-full h-full"
+                to={"/createpost"}
+              >
+                <LayoutDashboardIcon className="w-5 h-5" />
+                <span className="hidden md:inline">Create post</span>
+              </Link>
+            </li>
+          )}
+
           <li>
             <Link
               className="flex items-center gap-3 px-4 py-2 text-sm font-medium hover:bg-blue-800 active:bg-blue-700 rounded-lg w-full h-full"

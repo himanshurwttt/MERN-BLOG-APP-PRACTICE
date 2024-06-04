@@ -26,17 +26,17 @@ export default function DashBoard() {
   return (
     <>
       {currentUser ? (
-        <div className="md:min-h-screen max-w-screen-2xl mx-auto bg-blue-250 flex justify-between flex-col md:flex-row">
+        <div className="md:min-h-screen  h-[92vh] max-w-screen-2xl  mx-auto bg-blue-250 flex justify-between flex-col-reverse md:flex-row-reverse">
+          <div className="md:max-w-64  md:min-w-60 drop-shadow-2xl pt-0 pb-1">
+            {/* Sidebar */}
+            <DashSideBar />
+          </div>
           {tab === "profile" && <DashProfile />}
           {tab === "dashboardComp" && <DashComp />}
           {tab === "posts" && <DashPosts />}
           {tab === "comments" && <DashComments />}
           {tab === "users" && <DashUsers />}
           {tab === "updateprofile" && <UpdateProfile />}
-          <div className="md:max-w-64  md:min-w-60 drop-shadow-2xl pt-0 pb-1">
-            {/* Sidebar */}
-            <DashSideBar />
-          </div>
         </div>
       ) : (
         navigate("/")

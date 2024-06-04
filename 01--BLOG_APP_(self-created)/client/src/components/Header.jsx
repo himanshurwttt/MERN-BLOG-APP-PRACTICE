@@ -85,7 +85,7 @@ export default function Header() {
 
   return (
     <>
-      <nav className="w-full text-sm p-1 justify-center items-center max-w-screen-2xl mx-auto">
+      <nav className="w-full text-sm p-1 justify-center items-center max-w-screen-2xl mx-auto ">
         <div className="h-16 bg-blue-900 shadow-2xl border border-blue-900 rounded-2xl flex justify-between items-center ">
           <div className="left">
             <Link to={"/"}>
