@@ -3,12 +3,18 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { storage } from "../firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 const CreatePost = () => {
+  const { currentUser } = useSelector((state) => state.user);
+  const [progress, setProgress] = useState(0);
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [formError, setFormError] = useState(null);
+  const [formProcess, setFormProcess] = useState(false);
+  const navigate = useNavigate();
 
   const handleHeadingChange = (e) => {
     setTitle(e.target.value);
@@ -21,8 +27,8 @@ const CreatePost = () => {
     }
   };
 
-  const handleContentChange = (e) => {
-    setContent(e.target.value);
+  const handleContentChange = (content) => {
+    setContent(content);
   };
 
   const handleImageUpload = () => {
@@ -53,13 +59,44 @@ const CreatePost = () => {
           }
         );
       } else {
-        resolve(currentUser.profilePicture);
+        resolve();
       }
     });
   };
 
+  const handleSubmit = async (e) => {
+    setFormProcess(true);
+    e.preventDefault();
+    if (!title || !content || title === "" || content === "") {
+      setFormError("Sorry , Title and Content are must required");
+    }
+    try {
+      const image = await handleImageUpload();
+      const res = await fetch(`/api/post/createpost/${currentUser._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ image, title, content }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setFormError(data.message);
+        setFormProcess(false);
+      } else {
+        setFormError(null);
+        setFormProcess(false);
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+      setFormError(error);
+      setFormProcess(false);
+    }
+  };
+
   return (
-    <div className="w-full h-screen p-10">
+    <div className="w-full h-screen p-10 z-10">
       <div className="max-w-3xl m-auto p-5 bg-blue-300 drop-shadow-xl rounded-md h-full overflow-hidden">
         <h1 className="font-[500] text-4xl underline text-center ">
           CREATE POST
@@ -68,6 +105,7 @@ const CreatePost = () => {
           <div className="heading  w-full my-3">
             <input
               type="text"
+              disabled={formProcess}
               placeholder="BLOG TITLE HERE"
               className="p-1 rounded-md w-full text-center drop-shadow-lg"
               onChange={handleHeadingChange}
@@ -76,6 +114,7 @@ const CreatePost = () => {
           <div className="w-full flex flex-row justify-between items-center ">
             <label>Select Image :</label>
             <input
+              disabled={formProcess}
               type="file"
               onChange={handleImageChange}
               className="bg-white p-1 rounded-md drop-shadow-lg"
@@ -89,8 +128,13 @@ const CreatePost = () => {
             />
           </div>
           <div className="w-full">
-            <button className="bg-blue-900 text-white drop-shadow-md p-1 rounded-md w-full ">
-              Submit
+            <button
+              type="submit"
+              disabled={formProcess}
+              onClick={handleSubmit}
+              className="bg-blue-900 text-white drop-shadow-md p-1 rounded-md w-full active:scale-[0.99] "
+            >
+              {formProcess ? "Uploading..." : "Submit"}
             </button>
           </div>
         </form>

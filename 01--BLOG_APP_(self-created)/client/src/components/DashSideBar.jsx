@@ -11,6 +11,7 @@ export default function Component() {
         method: "POST",
       });
       if (res.ok) {
+        localStorage.removeItem("token");
         dispatch(signOutSuccess());
         navigate("/");
       }

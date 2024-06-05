@@ -34,7 +34,14 @@ export const signup = async (req, res, next) => {
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_TOKEN_KEY, {
       expiresIn: "5d",
     });
-    res.status(200).cookie("access_token", token).json(newUser);
+    res
+      .status(200)
+      .cookie("access_token", token, {
+        httpOnly: true,
+        sameSite: "strict",
+        path: "/",
+      })
+      .json(newUser);
   } catch (error) {
     next(error);
   }
@@ -59,7 +66,11 @@ export const signin = async (req, res, next) => {
 
     res
       .status(200)
-      .cookie("access_token", token, { httpOnly: true })
+      .cookie("access_token", token, {
+        httpOnly: true,
+        sameSite: "strict",
+        path: "/",
+      })
       .json(rest);
   } catch (error) {
     next(error);
@@ -120,7 +131,14 @@ export const google = async (req, res, next) => {
       });
       const { password, ...rest } = newUser._doc;
 
-      await res.status(200).cookie("access_token", token).json(rest); // Send user data directly
+      await res
+        .status(200)
+        .cookie("access_token", token, {
+          httpOnly: true,
+          sameSite: "strict",
+          path: "/",
+        })
+        .json(rest); // Send user data directly
     }
   } catch (error) {
     console.error(error);
@@ -131,7 +149,11 @@ export const google = async (req, res, next) => {
 export const signout = async (req, res, next) => {
   try {
     res
-      .clearCookie("access_token")
+      .clearCookie("access_token", {
+        sameSite: "strict",
+        httpOnly: true,
+        path: "/",
+      })
       .status(200)
       .json({ message: "signout successfully" });
   } catch (error) {

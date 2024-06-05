@@ -70,6 +70,7 @@ export default function Header() {
       });
       const data = await res.json();
       if (res.ok) {
+        localStorage.removeItem("token");
         dispatch(signOutSuccess());
         navigate("/");
         setShowdashBox(false);
@@ -125,7 +126,7 @@ export default function Header() {
                     {showdashBox ? (
                       <div
                         ref={dashBoxRef}
-                        className="w-auto h-44 rounded-lg absolute top-14 right-8 md:right-5 bg-blue-800 text-white mx-auto p-2 flex flex-col gap-3"
+                        className=" w-auto h-44 rounded-lg absolute top-14 right-8 md:right-5 bg-blue-800 text-white mx-auto p-2 flex flex-col gap-3"
                       >
                         <div>
                           <p className="text-xs">{currentUser.username}</p>

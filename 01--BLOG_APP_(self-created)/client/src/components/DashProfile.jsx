@@ -14,6 +14,7 @@ export default function DashProfile() {
       });
       const data = await res.json();
       if (res.ok) {
+        localStorage.removeItem("token");
         dispatch(signOutSuccess());
         navigate("/");
       }
