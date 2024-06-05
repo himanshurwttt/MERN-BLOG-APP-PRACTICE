@@ -38,18 +38,18 @@ export const createPost = async (req, res, next) => {
 
 export const getPost = async (req, res, next) => {
   try {
-    const startIndex = parseInt(req.querry.startIndex) || 0;
-    const limit = parseInt(req.querry.limit) || 9;
-    const sortDirection = req.querry.order == "asc" ? 1 : -1;
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 9;
+    const sortDirection = req.query.order == "asc" ? 1 : -1;
     const post = await Post.find({
-      ...(req.querry.title && { title: req.querry.title }),
-      ...(req.querry.slug && { slug: req.querry.slug }),
-      ...(req.querry.postId && { _id: req.querry.postId }),
-      ...(req.querry.userId && { userId: req.querry.userId }),
-      ...(req.querry.searchTerm && {
+      ...(req.query.title && { title: req.query.title }),
+      ...(req.query.slug && { slug: req.query.slug }),
+      ...(req.query.postId && { _id: req.query.postId }),
+      ...(req.query.userId && { userId: req.querry.userId }),
+      ...(req.query.searchTerm && {
         $or: [
-          { title: { $regex: req.querry.searchTerm, options: "i" } },
-          { content: { $regex: req.querry.searchTerm, options: "i" } },
+          { title: { $regex: req.query.searchTerm, options: "i" } },
+          { content: { $regex: req.query.searchTerm, options: "i" } },
         ],
       }),
     })
