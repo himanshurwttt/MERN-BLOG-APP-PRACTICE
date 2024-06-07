@@ -42,6 +42,7 @@ export const getPost = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 9;
     const sortDirection = req.query.order == "asc" ? 1 : -1;
     const post = await Post.find({
+<<<<<<< HEAD
       ...(req.query.slug && { slug: req.query.slug }),
       ...(req.query.postId && { _id: req.query.postId }),
       ...(req.query.userId && { userId: req.query.userId }),
@@ -53,6 +54,20 @@ export const getPost = async (req, res, next) => {
       }),
     })
       .sort({ updatedAt: sortDirection })
+=======
+      ...(req.query.title && { title: req.query.title }),
+      ...(req.query.slug && { slug: req.query.slug }),
+      ...(req.query.postId && { _id: req.query.postId }),
+      ...(req.query.userId && { userId: req.querry.userId }),
+      ...(req.query.searchTerm && {
+        $or: [
+          { title: { $regex: req.query.searchTerm, options: "i" } },
+          { content: { $regex: req.query.searchTerm, options: "i" } },
+        ],
+      }),
+    })
+      .sort(sortDirection)
+>>>>>>> origin/main
       .limit(limit)
       .skip(startIndex);
 
