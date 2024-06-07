@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { signOutSuccess } from "../redux/user/userSlice";
-
+import { IoCreateOutline } from "react-icons/io5";
 export default function Component() {
   const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -47,7 +47,7 @@ export default function Component() {
                 className="flex items-center gap-3 px-4 py-2 text-sm font-medium hover:bg-blue-800 active:bg-blue-700 rounded-lg w-full h-full"
                 to={"/createpost"}
               >
-                <LayoutDashboardIcon className="w-5 h-5" />
+                <IoCreateOutline className="w-5 h-5" />
                 <span className="hidden md:inline">Create post</span>
               </Link>
             </li>

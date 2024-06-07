@@ -96,12 +96,12 @@ const CreatePost = () => {
   };
 
   return (
-    <div className="w-full h-screen p-10 z-10">
-      <div className="max-w-3xl m-auto p-5 bg-blue-300 drop-shadow-xl rounded-md h-full overflow-hidden">
-        <h1 className="font-[500] text-4xl underline text-center ">
+    <div className="w-full md:h-screen h-[92vh] p-10 z-10 flex ">
+      <div className="max-w-3xl md:w-full m-auto p-5 bg-blue-300 drop-shadow-xl rounded-md h-[80%] my-auto  md:h-full  overflow-hidden md:mt-0  ">
+        <h1 className="font-[500] text-4xl underline text-center mb-4 md:mb-0">
           CREATE POST
         </h1>
-        <form className="max-w-2xl m-auto flex flex-col items-center gap-4">
+        <form className="max-w-3xl m-auto flex flex-col items-center   md:gap-4 gap-6">
           <div className="heading  w-full my-3">
             <input
               type="text"
