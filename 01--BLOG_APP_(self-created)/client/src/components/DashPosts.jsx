@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ContentBox from "./ContentBox";
 import DashContentBox from "./DashContentBox";
 import LoadingSpinner from "./LoadingSpinner";
 

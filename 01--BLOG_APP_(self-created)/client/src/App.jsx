@@ -30,7 +30,7 @@ const App = () => {
         </Route>
         <Route element={<OnlyAdminPrivateRoute />}>
           <Route path="/createpost" element={<CreatePost />} />
-          <Route path="/updatepost" element={<UpdatePost />} />
+          <Route path="/updatepost/:postId" element={<UpdatePost />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

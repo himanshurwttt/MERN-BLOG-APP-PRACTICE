@@ -3,7 +3,7 @@ import { IoCreate } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { FaArrowRight } from "react-icons/fa";
 import ReactHtmlParser from "react-html-parser";
-
+import { Link } from "react-router-dom";
 export default function DashContentBox({ post }) {
   return (
     <div className=" max-w-lg flex flex-row bg-blue-50  drop-shadow-lg rounded-lg overflow-hidden  mx-2 md:mx-0 my-2">
@@ -22,14 +22,18 @@ export default function DashContentBox({ post }) {
           {ReactHtmlParser(post.content)}
         </div>
         <div className="flex w-full justify-between text-sm">
-          <button className="flex items-center gap-2 text-blue-800 hover:underline">
-            Read
-            <FaArrowRight />
-          </button>
-          <button className="flex items-center gap-2 text-blue-800 hover:underline">
-            Update
-            <IoCreate />
-          </button>
+          <Link to={`/posts/${post.slug}`}>
+            <button className="flex items-center gap-2 text-blue-800 hover:underline">
+              Read
+              <FaArrowRight />
+            </button>
+          </Link>
+          <Link to={`/updatepost/${post._id}`}>
+            <button className="flex items-center gap-2 text-blue-800 hover:underline">
+              Update
+              <IoCreate />
+            </button>
+          </Link>
           <button className="flex items-center gap-2 text-blue-800 hover:underline">
             Delete
             <MdDelete />

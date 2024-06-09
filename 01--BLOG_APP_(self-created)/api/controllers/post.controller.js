@@ -42,7 +42,7 @@ export const getPost = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 9;
     const sortDirection = req.query.order == "asc" ? 1 : -1;
     const post = await Post.find({
-      ...(req.query.postId && { postId: req.query._id }),
+      ...(req.query.postId && { _id: req.query.postId }),
       ...(req.query.userId && { userId: req.query.userId }),
       ...(req.query.slug && { slug: req.query.slug }),
       ...(req.query.searchTerm && {
@@ -73,5 +73,34 @@ export const getPost = async (req, res, next) => {
     res.status(200).json({ post, totalPost, OneMonthAgo });
   } catch (error) {
     next(error);
+  }
+};
+
+export const updatePost = async (req, res, next) => {
+  const { title, image, content } = req.body;
+  if (title === "" || content === "" || !title || !content) {
+    console.log("all fields required");
+    return next(errorHandler(402, "title and content are required"));
+  }
+  const User2 = await User.findOne({ email: req.user.email });
+
+  const post = await Post.findById(req.params.postId);
+  const postUser = await Post.findOne({ userId: User2._id });
+  const userAdmin = await User.findById(post.userId);
+
+  if (!userAdmin.isAdmin || post.userId !== postUser.userId) {
+    console.log("authorization failed");
+    return next(errorHandler(401, "User not authorized, please login again"));
+  }
+  try {
+    await Post.findByIdAndUpdate(req.params.postId, {
+      title,
+      image,
+      content,
+    });
+    res.status(200).json("post updated Successfully");
+  } catch (error) {
+    res.json(error);
+    return next(error);
   }
 };
