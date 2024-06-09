@@ -22,8 +22,8 @@ export default function Component() {
 
   return (
     <div
-      className="flex mx-1 md:flex-col  md:h-full bg-blue-950 rounded-lg
-     text-white"
+      className="flex mx-1 md:flex-col  md:h-[90vh] bg-blue-950 rounded-lg
+     text-white z-50"
     >
       <div className="md:flex hidden items-center h-16 px-4 border-b border-gray-800">
         <Link className="flex items-center gap-2 text-lg font-semibold ">
