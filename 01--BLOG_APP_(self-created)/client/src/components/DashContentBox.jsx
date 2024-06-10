@@ -14,7 +14,7 @@ export default function DashContentBox({ post, refetchPosts }) {
 
   return (
     <>
-      <div className="max-w-lg flex flex-row bg-blue-50 drop-shadow-lg rounded-lg overflow-hidden mx-2 md:mx-0 my-2">
+      <div className="max-w-lg flex md:h-64 h-64 flex-row bg-blue-50 drop-shadow-lg rounded-lg overflow-hidden mx-2 md:mx-0 my-2">
         <div className="w-2/5 flex-shrink-0">
           <img
             src={post.image}
@@ -22,14 +22,14 @@ export default function DashContentBox({ post, refetchPosts }) {
             className="h-full w-full object-cover"
           />
         </div>
-        <div className="p-6 flex flex-col flex-wrap">
-          <div className="mb-2 w-full text-blue-gray-700 text-2xl text-ellipsis font-bold head capitalize h-24 overflow-hidden cursor-pointer duration-300">
+        <div className="p-6 flex flex-col justify-between ">
+          <div className="mb-2 w-full  text-blue-gray-700 md:text-2xl text-lg text-ellipsis font-bold head capitalize md:h-36 h-20 overflow-hidden cursor-pointer duration-300 ">
             {post.title}
           </div>
-          <div className="mb-4 max-w-64 text-gray-500 overflow-hidden h-20 p-1">
+          <div className="mb-4 md:max-w-64 max-w-52  text-gray-500 overflow-hidden h-28 p-1 ">
             {ReactHtmlParser(post.content)}
           </div>
-          <div className="flex w-full justify-between text-sm">
+          <div className="flex w-52 md:w-full  justify-between text-xs md:text-sm  gap-1">
             <Link to={`/posts/${post.slug}`}>
               <button className="flex items-center gap-2 text-blue-800 hover:underline">
                 Read

@@ -19,7 +19,7 @@ export default function DashPosts() {
         );
         setFetchProcess(false);
       } else {
-        console.log(data.post.slug);
+        // console.log(data.post.slug);
         setPosts(data.post);
         setFetchProcess(false);
       }
