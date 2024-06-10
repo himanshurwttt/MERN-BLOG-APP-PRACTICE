@@ -29,17 +29,27 @@ export default function DashPosts() {
     }
   };
 
+  const refetchPosts = () => {
+    fetchData();
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
   return (
     <div className="w-full max-w-screen-xl h-[90vh] overflow-hidden z-10 ">
       <div className=" flex flex-wrap w-full justify-around h-full overflow-y-auto ">
-        {fetchProcess ? (
-          <LoadingSpinner />
-        ) : (
-          posts.map((post) => <DashContentBox post={post} key={post._id} />)
-        )}
+        {fetchProcess
+          ? <LoadingSpinner /> || (
+              <h1 className="font-semibold"> No Post Available</h1>
+            )
+          : posts.map((post) => (
+              <DashContentBox
+                post={post}
+                key={post._id}
+                refetchPosts={refetchPosts}
+              />
+            ))}
       </div>
     </div>
   );

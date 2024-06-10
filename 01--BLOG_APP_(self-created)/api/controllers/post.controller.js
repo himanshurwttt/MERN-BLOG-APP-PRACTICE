@@ -104,3 +104,23 @@ export const updatePost = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const deletePost = async (req, res, next) => {
+  const User2 = await User.findOne({ email: req.user.email });
+  // console.log(User2);
+  const post = await Post.findById(req.params.postId);
+  console.log(post);
+  const postUser = await Post.findOne({ userId: User2._id });
+  const userAdmin = await User.findById(post.userId);
+
+  if (!userAdmin.isAdmin || post.userId !== postUser.userId) {
+    console.log("authorization failed");
+    return next(errorHandler(401, "User not authorized, please login again"));
+  }
+  try {
+    await Post.findByIdAndDelete(req.params.postId);
+    res.status(200).json("post deleted successfully");
+  } catch (error) {
+    return next(error);
+  }
+};
