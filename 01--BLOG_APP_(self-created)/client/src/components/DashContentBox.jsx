@@ -23,10 +23,10 @@ export default function DashContentBox({ post, refetchPosts }) {
           />
         </div>
         <div className="p-6 flex flex-col justify-between ">
-          <div className="mb-2 w-full  text-blue-gray-700 md:text-2xl text-lg text-ellipsis font-bold head capitalize md:h-36 h-20 overflow-hidden cursor-pointer duration-300 ">
+          <div className="mb-2 w-full  text-blue-gray-700 md:text-2xl text-lg text-ellipsis font-bold head capitalize md:h-36 h-28 overflow-hidden cursor-pointer duration-300 ">
             {post.title}
           </div>
-          <div className="mb-4 md:max-w-64 max-w-52  text-gray-500 overflow-hidden h-28 p-1 ">
+          <div className="mb-4 md:max-w-64 max-w-52  text-gray-500 overflow-hidden md:h-28 h-24 p-1 ">
             {ReactHtmlParser(post.content)}
           </div>
           <div className="flex w-52 md:w-full  justify-between text-xs md:text-sm  gap-1">

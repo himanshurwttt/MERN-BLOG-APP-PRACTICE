@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import postRouter from "./routes/post.route.js";
+import commentRouter from "./routes/comment.route.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
@@ -22,6 +23,7 @@ mongoose
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/post", postRouter);
+app.use("/api/comment", commentRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack); // Log the error stack trace

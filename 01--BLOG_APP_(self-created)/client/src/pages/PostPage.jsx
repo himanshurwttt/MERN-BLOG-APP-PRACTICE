@@ -8,7 +8,6 @@ export default function PostPage() {
   const { slug } = useParams();
   const [fetchError, setFetchError] = useState(null);
   const [postData, setPostData] = useState(null);
-
   useEffect(() => {
     try {
       const fetchData = async () => {
@@ -48,10 +47,10 @@ export default function PostPage() {
               className="object-cover w-full h-full rou"
             />
           </div>
-          <div className="content  text-wrap overflow-x-scroll  sm:max-w-5xl max-w-full m-auto prose prose-lg my-20 mx-3">
+          <div className="content  text-wrap overflow-x-scroll  sm:max-w-5xl max-w-full m-auto prose prose-lg my-20 ">
             {ReactHtmlParser(postData.content)}
           </div>
-          <CommentSection />
+          <CommentSection postId={postData._id} />
         </div>
       ) : (
         <LoadingSpinner />

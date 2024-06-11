@@ -37,7 +37,7 @@ export default function DashProfile() {
           <div className="inputs flex flex-col gap-5 my-10">
             <div className=" flex flex-col gap-5 md:flex-row">
               <div className="username flex flex-col gap-2 w-full ">
-                <label className="font-[500]">UserName :</label>
+                <label className="font-semibold">UserName :</label>
                 <input
                   type="text"
                   value={currentUser.username}
@@ -46,7 +46,7 @@ export default function DashProfile() {
                 />
               </div>
               <div className="email flex flex-col gap-2 w-full">
-                <label className="font-[500]">Email :</label>
+                <label className="font-semibold">Email :</label>
                 <input
                   type="text"
                   value={currentUser.email}
@@ -56,7 +56,7 @@ export default function DashProfile() {
               </div>
             </div>
             <div className="bio flex flex-col gap-2">
-              <label className="font-[500]">Bio :</label>
+              <label className="font-semibold">Bio :</label>
               <textarea
                 maxLength={"180"}
                 value={currentUser.bio}
@@ -68,7 +68,7 @@ export default function DashProfile() {
           <div className="buttons flex flex-col md:flex-row gap-5">
             <div className="update w-full">
               <Link to={"/dashboard?tab=updateprofile"}>
-                <button className="w-full  font-[500] text-white bg-blue-800 p-3 shadow-lg rounded-full active:scale-[0.95] duration-100 drop-shadow-xl focus:outline-none">
+                <button className="w-full  font-semibold text-white bg-blue-800 p-3 shadow-lg rounded-full active:scale-[0.95] duration-100 drop-shadow-xl focus:outline-none">
                   Update
                 </button>
               </Link>
@@ -76,7 +76,7 @@ export default function DashProfile() {
             <div className="signout w-full">
               <button
                 onClick={handleSignOut}
-                className="w-full  font-[500] text-white bg-red-600 p-3 shadow-lg rounded-full active:scale-[0.95] duration-100 drop-shadow-xl focus:outline-none"
+                className="w-full  font-semibold text-white bg-red-600 p-3 shadow-lg rounded-full active:scale-[0.95] duration-100 drop-shadow-xl focus:outline-none"
               >
                 Sign Out
               </button>
