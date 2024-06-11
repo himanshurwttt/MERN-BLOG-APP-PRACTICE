@@ -103,7 +103,7 @@ export default function UpdateProfile() {
     <div className="w-full ">
       <div className="w-full  h-[82vh] sm:h-full flex justify-center ">
         <form onSubmit={handleSubmit} className="box w-full p-2 md:w-[70%]">
-          <h1 className="font-semibold text-4xl text-center uppercase underline text-gray-600">
+          <h1 className="font-[500] text-4xl text-center uppercase underline text-gray-600">
             Update Profile
           </h1>
           <div className="img rounded-full my-5 flex justify-center items-center ">
@@ -124,7 +124,7 @@ export default function UpdateProfile() {
           <div className="inputs flex flex-col gap-5 my-10">
             <div className=" flex flex-col gap-5 md:flex-row">
               <div className="username flex flex-col gap-2 w-full ">
-                <label className="font-semibold">UserName :</label>
+                <label className="font-[500]">UserName :</label>
                 <input
                   type="text"
                   value={username}
@@ -134,7 +134,7 @@ export default function UpdateProfile() {
                 />
               </div>
               <div className="email flex flex-col gap-2 w-full">
-                <label className="font-semibold">Email :</label>
+                <label className="font-[500]">Email :</label>
                 <input
                   type="text"
                   value={currentUser.email}
@@ -144,7 +144,7 @@ export default function UpdateProfile() {
               </div>
             </div>
             <div className="bio flex flex-col gap-2">
-              <label className="font-semibold">Bio :</label>
+              <label className="font-[500]">Bio :</label>
               <textarea
                 maxLength={"180"}
                 value={bio}
@@ -168,7 +168,7 @@ export default function UpdateProfile() {
             <div className="update w-full">
               <button
                 disabled={updateProcess}
-                className="w-full  font-semibold text-white bg-blue-800 p-3 shadow-lg rounded-full active:scale-[0.98   ] duration-100 drop-shadow-xl focus:outline-none"
+                className="w-full  font-[500] text-white bg-blue-800 p-3 shadow-lg rounded-full active:scale-[0.98   ] duration-100 drop-shadow-xl focus:outline-none"
               >
                 {updateProcess ? "Updating...." : "Update"}
               </button>

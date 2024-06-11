@@ -26,7 +26,7 @@ export default function Component() {
      text-white z-50"
     >
       <div className="md:flex hidden items-center h-16 px-4 border-b border-gray-800">
-        <Link className="flex items-center gap-2 text-lg font-semibold ">
+        <Link className="flex items-center gap-2 text-lg font-[500] ">
           <span className="">BLOG</span>
         </Link>
       </div>

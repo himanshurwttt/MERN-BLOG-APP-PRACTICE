@@ -1,5 +1,5 @@
 import React from "react";
 
 export default function Comment() {
-  return <div>Comment</div>;
+  return <div>no comments yet</div>;
 }

@@ -41,7 +41,7 @@ export default function DashPosts() {
       <div className=" flex flex-wrap w-full justify-around h-full overflow-y-auto ">
         {fetchProcess
           ? <LoadingSpinner /> || (
-              <h1 className="font-semibold"> No Post Available</h1>
+              <h1 className="font-[500]"> No Post Available</h1>
             )
           : posts.map((post) => (
               <DashContentBox

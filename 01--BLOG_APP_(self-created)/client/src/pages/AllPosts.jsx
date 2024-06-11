@@ -35,14 +35,14 @@ export default function AllPosts() {
   }, []);
 
   return (
-    <div className="w-full max-w-screen-xl  p-3 m-auto">
+    <div className="w-full max-w-screen-xl h-full min-h-screen p-3 m-auto">
       <h1 className="w-full text-center text-4xl font-[500] underline text-stone-800 mb-5">
         ALL POSTS
       </h1>
       {fetchProcess ? (
         <LoadingSpinner />
       ) : (
-        <div className="flex flex-wrap p-2 justify-between md:gap-4 gap-1">
+        <div className="flex flex-wrap start p-2 justify-end md:gap-4 gap-1">
           {posts && posts.length > 0 ? (
             posts.map((post) => (
               <ContentBox key={post.id} post={post} /> // Assuming each post has a unique 'id'

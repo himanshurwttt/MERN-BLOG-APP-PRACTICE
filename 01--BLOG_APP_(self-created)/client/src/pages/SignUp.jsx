@@ -141,7 +141,7 @@ const SignUp = () => {
               onSubmit={handleSubmit}
               className="w-full border  border-white bg-blue-50 mx-auto flex flex-col gap-[10px]   drop-shadow-2xl rounded-2xl sm:rounded-r-none p-5"
             >
-              <h2 className=" text-center text-3xl font-semibold text-gray-700">
+              <h2 className=" text-center text-3xl font-[500] text-gray-700">
                 SIGN UP
               </h2>
               <div className="flex flex-col gap-3">
@@ -219,7 +219,7 @@ const SignUp = () => {
           </div>
           <div className="box hidden sm:flex  w-[50%]">
             <div className=" border border-white  mx-auto  bg-blue-700 text-white rounded-r-2xl   flex flex-col gap-6 w-full justify-center items-center p-8">
-              <h1 className="text-center md:text-6xl text-4xl font-semibold">
+              <h1 className="text-center md:text-6xl text-4xl font-[500]">
                 LET'S GET STARTED
               </h1>
               <div className="text-center ">

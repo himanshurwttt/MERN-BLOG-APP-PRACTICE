@@ -27,7 +27,7 @@ const Modal = ({ isOpen, closeModal, postId, refetchPosts }) => {
         onClick={(e) => e.stopPropagation()}
         className="relative m-auto p-2 text-center flex flex-col items-center md:min-w-2xl md:max-w-lg w-[80%] rounded-lg bg-blue-100 font-sans text-base font-light leading-relaxed text-blue-gray-500 antialiased shadow-2xl"
       >
-        <h1 className="flex items-center text-center justify-between p-4 mx-auto font-sans text-2xl antialiased font-semibold leading-snug shrink-0 text-blue-gray-900">
+        <h1 className="flex items-center text-center justify-between p-4 mx-auto font-sans text-2xl antialiased font-[500] leading-snug shrink-0 text-blue-gray-900">
           DELETE POST
         </h1>
         <div className="relative p-4 text-sm md:text-base antialiased font-[500] leading-relaxed border-t border-b border-t-blue-gray-100 border-b-blue-gray-100 text-blue-gray-500">

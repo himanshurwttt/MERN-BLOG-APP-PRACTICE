@@ -134,7 +134,7 @@ export default function Header() {
                             {currentUser.email}
                           </p>
                         </div>
-                        <div className="flex flex-col text-xs font-semibold gap-1">
+                        <div className="flex flex-col text-xs font-[500] gap-1">
                           <Link to={"/dashboard?tab=dashboardComp"}>
                             <p
                               onClick={handleProfileBox}

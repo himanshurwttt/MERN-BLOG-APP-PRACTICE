@@ -18,7 +18,7 @@
 
 @font-face {
   font-family: "Poppins";
-  src: url("./fonts/Poppins-SemiBold.ttf") format("truetype");
+  src: url("./fonts/Poppins-[500].ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
 }

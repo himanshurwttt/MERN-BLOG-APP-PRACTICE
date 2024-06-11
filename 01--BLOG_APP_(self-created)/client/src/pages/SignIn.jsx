@@ -130,7 +130,7 @@ const SignIn = () => {
               onSubmit={handleSubmit}
               className="w-full border mt-6 border-white bg-blue-50 mx-auto flex flex-col gap-6   drop-shadow-2xl rounded-2xl sm:rounded-r-none p-5"
             >
-              <h2 className=" text-center text-3xl font-semibold text-gray-700">
+              <h2 className=" text-center text-3xl font-[500] text-gray-700">
                 SIGN IN
               </h2>
               <div className="flex flex-col gap-3">
@@ -197,7 +197,7 @@ const SignIn = () => {
           </div>
           <div className="box hidden sm:flex  w-[50%]">
             <div className=" border mt-6 border-white  mx-auto py-[127px] bg-blue-700 text-white rounded-r-2xl   flex flex-col gap-6 w-full p-8">
-              <h1 className="text-center md:text-6xl text-4xl font-semibold">
+              <h1 className="text-center md:text-6xl text-4xl font-[500]">
                 WELCOME BACK
               </h1>
               <div className="text-center ">

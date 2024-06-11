@@ -2,27 +2,23 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ReactHtmlParser from "react-html-parser";
 import CommentSection from "../components/CommentSection";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function PostPage() {
   const { slug } = useParams();
   const [fetchError, setFetchError] = useState(null);
-  const [fetchLoading, setFetchLoading] = useState(false);
   const [postData, setPostData] = useState(null);
-  console.log(slug);
 
   useEffect(() => {
     try {
       const fetchData = async () => {
-        setFetchLoading(true);
         try {
           const res = await fetch(`/api/post/getpost?slug=${slug}`);
           const data = await res.json();
 
           if (!res.ok) {
-            setFetchLoading(false);
             setFetchError("something went wrong please try again");
           } else {
-            setFetchLoading(false);
             setFetchError(null);
             setPostData(data.post[0]);
           }
@@ -52,14 +48,15 @@ export default function PostPage() {
               className="object-cover w-full h-full rou"
             />
           </div>
-          <div className="content  max-w-5xl m-auto prose prose-lg my-20">
+          <div className="content  text-wrap overflow-x-scroll  sm:max-w-5xl max-w-full m-auto prose prose-lg my-20 mx-3">
             {ReactHtmlParser(postData.content)}
           </div>
           <CommentSection />
         </div>
       ) : (
-        <p>Loading...</p>
+        <LoadingSpinner />
       )}
+      {fetchError && <p>{fetchError}</p>}
     </div>
   );
 }

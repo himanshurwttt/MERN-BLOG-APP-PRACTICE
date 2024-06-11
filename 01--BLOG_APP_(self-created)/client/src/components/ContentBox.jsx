@@ -8,7 +8,7 @@ export default function ContentBox({ post }) {
   return (
     <div
       ref={mainBox}
-      className="bg-blue-300 mt-2 md:w-72 w-[48%] h-80 rounded-xl p-2 flex flex-col gap-1 justify-between overflow-hidden shadow-slate-400 hover:drop-shadow-lg hover:shadow-slate-400 duration-300 shadow-sm m-auto scale-[1]"
+      className="bg-blue-300  mt-2 md:w-72 w-[48%] h-80 rounded-xl p-2 flex flex-col gap-1 justify-between overflow-hidden shadow-slate-400 hover:drop-shadow-lg hover:shadow-slate-400 duration-300 shadow-sm m-auto scale-[1]"
     >
       <div className="img w-full h-40  rounded-lg overflow-hidden">
         <div className="img w-full h-40 rounded-lg shadow-xl hover:scale-[1.1] duration-200 object-cover">
