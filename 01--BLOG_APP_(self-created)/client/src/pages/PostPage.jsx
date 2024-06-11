@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ReactHtmlParser from "react-html-parser";
+import CommentSection from "../components/CommentSection";
 
 export default function PostPage() {
   const { slug } = useParams();
@@ -54,6 +55,7 @@ export default function PostPage() {
           <div className="content  max-w-5xl m-auto prose prose-lg my-20">
             {ReactHtmlParser(postData.content)}
           </div>
+          <CommentSection />
         </div>
       ) : (
         <p>Loading...</p>
