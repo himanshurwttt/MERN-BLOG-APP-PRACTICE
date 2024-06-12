@@ -121,7 +121,11 @@ export default function CommentSection({ postId }) {
       <div className="w-full md:px-8 px-5 flex flex-col mt-10">
         {postComments.length > 0 ? (
           postComments.map((comment) => (
-            <Comment comment={comment} refetchComments={refetchComments} />
+            <Comment
+              key={comment._id}
+              comment={comment}
+              refetchComments={refetchComments}
+            />
           ))
         ) : (
           <p className="bg-blue-50 shadow-slate-400 shadow-md outline-1 outline-blue-200  m-auto my-4 p-3 rounded-md md:max-w-md md:mx-auto w-full max-w-md text-slate-700 font-[500] ">
