@@ -1,36 +1,71 @@
-import React from "react";
+import React, { useEffect, useInsertionEffect, useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 import { IoMdCreate } from "react-icons/io";
 import { BiTimeFive } from "react-icons/bi";
+import { useSelector } from "react-redux";
+import moment from "moment";
+export default function Comment({ comment }) {
+  const { currentUser } = useSelector((state) => state.user);
+  const [commentUser, setCommentUser] = useState("");
 
-export default function Comment() {
+  const fetchCommentUsers = async () => {
+    try {
+      const res = await fetch(`/api/comment/getCommentUser/${comment.userId}`);
+      const data = await res.json();
+      if (res.ok) {
+        setCommentUser(data);
+        console.log(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCommentUsers();
+  }, [comment.userId]);
+
   return (
-    <div className="bg-blue-50 shadow-slate-400 shadow-md outline-1 outline-blue-200  m-auto my-8 p-3 rounded-md md:max-w-md md:mx-auto w-full max-w-md ">
-      <div className=" mb-2 w-full flex flex-row justify-between items-center">
-        <div className="flex items-center gap-1">
-          <img src="" alt="" className="bg-blue-300 w-7 h-7 rounded-full " />{" "}
-          <label className="text-sm italic text-zinc-700">@username</label>
+    <div className="bg-blue-50 shadow-slate-400 shadow-md outline-1 outline-blue-200  m-auto my-4 p-3 rounded-md md:max-w-md md:mx-auto w-full max-w-md ">
+      <div className=" mb-2  w-full flex flex-row justify-between items-center">
+        <div className="flex  items-center gap-1">
+          <img
+            src={commentUser.profilePicture}
+            alt={commentUser.username}
+            className="bg-cover w-8 h-8 rounded-full border-[2px] border-zinc-500 "
+          />
+          <label className="text-xs italic text-zinc-700">
+            {commentUser
+              ? `@${commentUser.username.toLowerCase()}`
+              : "@abcd1234"}
+          </label>
         </div>
         <div className="ago text-xs flex flex-row justify-center items-center gap-1">
-          <BiTimeFive className="scale-[1.2] text-zinc-700" /> 3 days ago
+          <BiTimeFive className="scale-[1.2] text-zinc-700" />
+          {moment(comment.createdAt).fromNow()}
         </div>
       </div>
       <hr />
       <div className="content text-xs text-zinc-600 font-[500] my-4 selection:bg-none">
-        is there something that i can tell you but i wanna know if i can tell
-        you or not bcz i think ican but my mind says i can't what's this
-        difficulties even i don't know what is going on with me is this the end
-        saiyan goku are you really finished or now vegita will continue your
-        legacy btw i like vegita
+        {comment.content}
       </div>
-      <div className=" p-2 flex justify-between">
+      <div className=" py-2 flex justify-between">
         <div className="flex gap-2 ">
-          <FaRegHeart className=" cursor-pointer active:scale-[0.95] scale-[1.1] duration-100 " />
-          <IoMdCreate className=" cursor-pointer active:scale-[0.95] scale-[1.1] duration-100 " />
+          {currentUser && (
+            <FaRegHeart className=" cursor-pointer active:scale-[0.95] scale-[1.1] duration-100 " />
+          )}
+          <p className="text-xs font-[500] text-zinc-700 selection:bg-none">
+            {comment.noOfLikes}
+          </p>
         </div>
-        <div className="text-xs text-zinc-700 selection:bg-none">
-          {" "}
-          Likes: 200
+        <div className="flex gap-2  ">
+          {currentUser._id === comment.userId && (
+            <IoMdCreate className=" cursor-pointer active:scale-[0.95] scale-[1.1] duration-100 " />
+          )}
+          {(currentUser._id === comment.userId || currentUser.isAdmin) && (
+            <MdDelete className=" cursor-pointer active:scale-[0.95] scale-[1.1] duration-100" />
+          )}
         </div>
       </div>
     </div>

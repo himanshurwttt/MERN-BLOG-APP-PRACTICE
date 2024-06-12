@@ -34,3 +34,19 @@ export const updateUser = async (req, res, next) => {
     return next(error);
   }
 };
+
+// export const getUsers = async (req, res, next) => {
+//   try {
+//     if (!req.user.isAdmin) {
+//       return next(errorHandler(401, "Admin required to fetch all users"));
+//     } else {
+//       const allUsers = await User.find();
+//       const noOfUsers = await User.countDocuments();
+
+//       const { password, ...rest } = allUsers._doc;
+//       res.status(200).json({ rest, noOfUsers });
+//     }
+//   } catch (error) {
+//     return next(error);
+//   }
+// };

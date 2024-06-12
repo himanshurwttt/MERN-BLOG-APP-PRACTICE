@@ -6,4 +6,5 @@ const router = express.Router();
 
 router.get("/test", test);
 router.put("/updateUser/:userId", verifyToken, updateUser);
+// router.get("/getUser/:userId", getUsers);
 export default router;

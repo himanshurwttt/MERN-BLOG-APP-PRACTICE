@@ -33,3 +33,40 @@ export const createComment = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const getComments = async (req, res, next) => {
+  if (!req.params.postId) {
+    return next(errorHandler(402, "Can't find comment now"));
+  }
+  try {
+    const comments = await Comment.find({ postId: req.params.postId });
+    if (!comments) {
+      return next(errorHandler(402, "No comments"));
+    }
+    console.log(comments);
+    res.status(200).json(comments);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const getCommentUser = async (req, res, next) => {
+  const userId = req.params.userId;
+  if (!userId) {
+    return next(errorHandler(402, "User not Found"));
+  }
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return next(errorHandler(403, "User Not Found"));
+    } else {
+      res.status(200).json({
+        username: user.username,
+        profilePicture: user.profilePicture,
+        email: user.email,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};

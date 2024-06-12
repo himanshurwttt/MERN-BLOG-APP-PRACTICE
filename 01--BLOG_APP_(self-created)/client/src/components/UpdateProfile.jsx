@@ -130,7 +130,7 @@ export default function UpdateProfile() {
                   value={username}
                   id="username"
                   onChange={handleUserNameChnage}
-                  className="w-full p-1 rounded-md px-6 drop-shadow-xl focus:outline-none "
+                  className="lowercase w-full p-1 rounded-md px-6 drop-shadow-xl focus:outline-none "
                 />
               </div>
               <div className="email flex flex-col gap-2 w-full">

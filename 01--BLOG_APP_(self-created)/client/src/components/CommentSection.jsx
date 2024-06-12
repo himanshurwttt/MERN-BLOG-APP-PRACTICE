@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import Comment from "./Comment";
 import { useSelector } from "react-redux";
 export default function CommentSection({ postId }) {
   const [comment, setComment] = useState("");
   const [formError, setFormError] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
+  const [postComments, setPostComments] = useState([]);
 
-  console.log("postId:", postId);
-  console.log("userId:", currentUser._id);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (comment.length == 0) {
@@ -30,11 +29,36 @@ export default function CommentSection({ postId }) {
       if (res.ok) {
         setComment("");
         setFormError(null);
+        setPostComments((prevComments) =>
+          [...prevComments, data].sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          )
+        );
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  const fetchComments = async () => {
+    try {
+      const res = await fetch(`/api/comment/getComments/${postId}`);
+      const data = await res.json();
+      if (res.ok) {
+        data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setPostComments(data);
+        console.log("Fetched Comments:", data);
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchComments();
+  }, [postId]);
 
   return (
     <>
@@ -76,9 +100,14 @@ export default function CommentSection({ postId }) {
           </form>
         </div>
       </div>
-      <div className="w-full md:px-8 px-5 flex flex-col">
-        <Comment />
-        <Comment />
+      <div className="w-full md:px-8 px-5 flex flex-col mt-10">
+        {postComments.length > 0 ? (
+          postComments.map((comment) => <Comment comment={comment} />)
+        ) : (
+          <p className="bg-blue-50 shadow-slate-400 shadow-md outline-1 outline-blue-200  m-auto my-4 p-3 rounded-md md:max-w-md md:mx-auto w-full max-w-md text-slate-700 font-[500] ">
+            No Comments Yet...
+          </p>
+        )}
       </div>
     </>
   );
