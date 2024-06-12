@@ -12,15 +12,21 @@ export const createComment = async (req, res, next) => {
     const { content, postId } = req.body;
     const user = await User.findById(req.params.userId);
     const User2 = await User.findOne({ email: req.user.email });
+    const User3 = await User.findOne({ _id: req.user.id });
 
-    if (!user._id.toString() || !User2._id.toString()) {
-      return next(errorHandler(404, "User not found"));
+    if (req.user.id) {
+      if (user._id.toString() !== User3._id.toString()) {
+        return next(
+          errorHandler(403, "You are not allowed to update this user")
+        );
+      }
+    } else if (req.user.email) {
+      if (user._id.toString() !== User2._id.toString()) {
+        return next(
+          errorHandler(403, "You are not allowed to update this user")
+        );
+      }
     }
-
-    if (user._id.toString() !== User2._id.toString()) {
-      return next(errorHandler(403, "You are not allowed to crate this user"));
-    }
-
     const newComment = new Comment({
       content,
       postId,
@@ -43,7 +49,6 @@ export const getComments = async (req, res, next) => {
     if (!comments) {
       return next(errorHandler(402, "No comments"));
     }
-    console.log(comments);
     res.status(200).json(comments);
   } catch (error) {
     return next(error);
@@ -68,5 +73,34 @@ export const getCommentUser = async (req, res, next) => {
     }
   } catch (error) {
     next(error);
+  }
+};
+
+export const commentLike = async (req, res, next) => {
+  const { id } = req.params;
+  const { userId } = req.body;
+
+  try {
+    const comment = await Comment.findById(id);
+
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+
+    const hasLiked = comment.likes.includes(userId);
+
+    if (hasLiked) {
+      comment.likes.pull(userId);
+      comment.noOfLikes -= 1;
+    } else {
+      comment.likes.push(userId);
+      comment.noOfLikes += 1;
+    }
+
+    await comment.save();
+
+    res.status(200).json(comment);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };

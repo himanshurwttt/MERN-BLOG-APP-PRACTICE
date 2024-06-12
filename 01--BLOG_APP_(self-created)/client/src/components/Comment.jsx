@@ -5,9 +5,10 @@ import { IoMdCreate } from "react-icons/io";
 import { BiTimeFive } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import moment from "moment";
-export default function Comment({ comment }) {
+export default function Comment({ comment, refetchComments }) {
   const { currentUser } = useSelector((state) => state.user);
   const [commentUser, setCommentUser] = useState("");
+  const [commentError, setCommentError] = useState(null);
 
   const fetchCommentUsers = async () => {
     try {
@@ -22,6 +23,26 @@ export default function Comment({ comment }) {
     }
   };
 
+  const handleLike = async () => {
+    try {
+      const res = await fetch(`/api/comment/like/${comment._id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: currentUser._id }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setCommentError(data.message);
+      } else {
+        refetchComments();
+      }
+    } catch (error) {
+      setCommentError("Something went wrong, please try again later.");
+    }
+  };
   useEffect(() => {
     fetchCommentUsers();
   }, [comment.userId]);
@@ -52,19 +73,36 @@ export default function Comment({ comment }) {
       </div>
       <div className=" py-2 flex justify-between">
         <div className="flex gap-2 ">
+          {/* // <FaRegHeart /> */}
           {currentUser && (
-            <FaRegHeart className=" cursor-pointer active:scale-[0.95] scale-[1.1] duration-100 " />
+            <>
+              {comment.likes.includes(currentUser._id) ? (
+                <FaHeart
+                  onClick={handleLike}
+                  className=" cursor-pointer text-red-500 active:scale-[0.95] scale-[1.1] duration-100 "
+                />
+              ) : (
+                <FaRegHeart
+                  onClick={handleLike}
+                  className=" cursor-pointer  active:scale-[0.95] scale-[1.1] duration-100 "
+                />
+              )}
+            </>
           )}
           <p className="text-xs font-[500] text-zinc-700 selection:bg-none">
             {comment.noOfLikes}
           </p>
         </div>
-        <div className="flex gap-2  ">
-          {currentUser._id === comment.userId && (
-            <IoMdCreate className=" cursor-pointer active:scale-[0.95] scale-[1.1] duration-100 " />
-          )}
-          {(currentUser._id === comment.userId || currentUser.isAdmin) && (
-            <MdDelete className=" cursor-pointer active:scale-[0.95] scale-[1.1] duration-100" />
+        <div className="flex gap-2">
+          {currentUser && (
+            <>
+              {currentUser._id === comment.userId && (
+                <IoMdCreate className="cursor-pointer active:scale-[0.95] scale-[1.1] duration-100" />
+              )}
+              {(currentUser._id === comment.userId || currentUser.isAdmin) && (
+                <MdDelete className="cursor-pointer active:scale-[0.95] scale-[1.1] duration-100" />
+              )}
+            </>
           )}
         </div>
       </div>

@@ -126,7 +126,7 @@ export default function Header() {
                     {showdashBox ? (
                       <div
                         ref={dashBoxRef}
-                        className=" w-auto h-32 rounded-lg absolute top-14 right-8 md:right-5 bg-blue-800 text-white mx-auto p-2 flex flex-col gap-3"
+                        className=" w-auto  rounded-lg absolute top-14 right-8 md:right-5 bg-blue-800 text-white mx-auto p-2 flex flex-col gap-3"
                       >
                         <div>
                           <p className="text-xs">{currentUser.username}</p>
@@ -135,14 +135,17 @@ export default function Header() {
                           </p>
                         </div>
                         <div className="flex flex-col text-xs font-[500] gap-1">
-                          <Link to={"/dashboard?tab=dashboardComp"}>
-                            <p
-                              onClick={handleProfileBox}
-                              className="p-1 py-2 rounded-md hover:bg-white hover:text-black duration-200"
-                            >
-                              Dashboard
-                            </p>
-                          </Link>
+                          {currentUser.isAdmin && (
+                            <Link to={"/dashboard?tab=dashboardComp"}>
+                              <p
+                                onClick={handleProfileBox}
+                                className="p-1 py-2 rounded-md hover:bg-white hover:text-black duration-200"
+                              >
+                                Dashboard
+                              </p>
+                            </Link>
+                          )}
+
                           {/* <Link to={"/dashboard?tab=posts"}>
                             <p
                               onClick={handleProfileBox}

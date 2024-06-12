@@ -24,8 +24,8 @@ export default function DashProfile() {
   };
 
   return (
-    <div className="w-full ">
-      <div className="w-full  h-full  flex justify-center ">
+    <div className="w-full m-auto ">
+      <div className="w-full  m-auto h-full  flex justify-center ">
         <div className="box w-full p-2 md:w-[70%]">
           <div className="img   rounded-full my-5 flex justify-center items-center ">
             <img

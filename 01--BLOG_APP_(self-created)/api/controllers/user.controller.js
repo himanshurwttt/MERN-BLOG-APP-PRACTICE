@@ -10,9 +10,16 @@ export const test = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
   const user = await User.findById(req.params.userId);
   const User2 = await User.findOne({ email: req.user.email });
+  const User3 = await User.findOne({ _id: req.user.id });
 
-  if (user._id.toString() !== User2._id.toString()) {
-    return next(errorHandler(403, "You are not allowed to update this user"));
+  if (req.user.id) {
+    if (user._id.toString() !== User3._id.toString()) {
+      return next(errorHandler(403, "You are not allowed to update this user"));
+    }
+  } else if (req.user.email) {
+    if (user._id.toString() !== User2._id.toString()) {
+      return next(errorHandler(403, "You are not allowed to update this user"));
+    }
   }
 
   try {
