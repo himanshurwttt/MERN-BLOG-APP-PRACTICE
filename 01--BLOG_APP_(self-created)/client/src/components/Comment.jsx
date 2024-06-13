@@ -4,14 +4,20 @@ import { MdDelete } from "react-icons/md";
 import { IoMdCreate, IoMdCheckmark } from "react-icons/io";
 import { BiTimeFive } from "react-icons/bi";
 import { useSelector } from "react-redux";
+import { RxCross2 } from "react-icons/rx";
 import moment from "moment";
+
 export default function Comment({ comment, refetchComments }) {
   const { currentUser } = useSelector((state) => state.user);
   const [commentUser, setCommentUser] = useState("");
   const [commentError, setCommentError] = useState(null);
   const [edit, setEdit] = useState(false);
   const [content, setContent] = useState(comment.content);
-  // console.log(edit, content);
+  const [editContent, setEditContent] = useState(comment.content);
+
+  console.log(editContent);
+  console.log(content);
+
   const fetchCommentUsers = async () => {
     try {
       const res = await fetch(`/api/comment/getCommentUser/${comment.userId}`);
@@ -48,7 +54,31 @@ export default function Comment({ comment, refetchComments }) {
     fetchCommentUsers();
   }, [comment.userId]);
 
-  const handleEditComment = () => {
+  const handleEditComment = async () => {
+    try {
+      const res = await fetch(`/api/comment/edit/${comment._id}`, {
+        method: "PUT",
+        body: JSON.stringify({ content: editContent, userId: comment.userId }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setCommentError("Can't edit right now!");
+      } else {
+        setContent(editContent);
+        refetchComments();
+        setEdit(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setCommentError("Can't edit right now!");
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditContent(content);
     setEdit(false);
   };
 
@@ -76,9 +106,9 @@ export default function Comment({ comment, refetchComments }) {
       {edit ? (
         <textarea
           maxLength={"300"}
-          value={comment.content}
+          value={editContent}
           className="content px-3 py-2 resize-none focus:outline-[0.1px]    text-xs w-full rounded-md drop-shadow-lg bg-blue-50 text-zinc-600 font-[500] my-4 selection:bg-none"
-          onChange={(e) => setContent(e.target.value)}
+          onChange={(e) => setEditContent(e.target.value)}
         />
       ) : (
         <div className="content text-xs text-zinc-600 font-[500] my-4 selection:bg-none">
@@ -104,7 +134,14 @@ export default function Comment({ comment, refetchComments }) {
             </>
           )}
           <p className="text-xs font-[500] text-zinc-700 selection:bg-none">
-            {comment.noOfLikes}
+            {!currentUser ? (
+              <div className="flex flex-row gap-1 justify-normal items-center">
+                <FaHeart className="text-red-500 scale-[1.1] duration-100 " />{" "}
+                {comment.noOfLikes}
+              </div>
+            ) : (
+              `${comment.noOfLikes}`
+            )}
           </p>
         </div>
         <div className="flex gap-2">
@@ -122,9 +159,15 @@ export default function Comment({ comment, refetchComments }) {
                     className="cursor-pointer active:scale-[0.95] text-green-600 scale-[1.3] duration-100"
                   />
                 ))}
-              {(currentUser._id === comment.userId || currentUser.isAdmin) && (
-                <MdDelete className="cursor-pointer active:scale-[0.95] scale-[1.1] duration-100" />
-              )}
+              {(currentUser._id === comment.userId || currentUser.isAdmin) &&
+                (!edit ? (
+                  <MdDelete className="cursor-pointer active:scale-[0.95] scale-[1.1] duration-100" />
+                ) : (
+                  <RxCross2
+                    onClick={handleCancelEdit}
+                    className="cursor-pointer active:scale-[0.95] scale-[1.1] duration-100"
+                  />
+                ))}
             </>
           )}
         </div>

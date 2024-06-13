@@ -104,3 +104,38 @@ export const commentLike = async (req, res, next) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const edit = async (req, res, next) => {
+  const { content, userId } = req.body;
+  const User2 = await User.findOne({ email: req.user.email });
+  const User3 = await User.findOne({ _id: req.user.id });
+
+  if (req.user.id) {
+    if (userId !== User3._id.toString()) {
+      return next(
+        errorHandler(403, "You are not allowed to update this comment")
+      );
+    }
+  } else if (req.user.email) {
+    if (userId !== User2._id.toString()) {
+      return next(
+        errorHandler(403, "You are not allowed to update this comment")
+      );
+    }
+  }
+  try {
+    const comment = await Comment.findById(req.params.commentId);
+    if (comment.userId === userId) {
+      await Comment.findByIdAndUpdate(
+        req.params.commentId,
+        { $set: { content: content } },
+        { new: true } //the findByIdAndUpdate does not requires the save() propertie
+      );
+      res.status(200).json("comment updated successfully");
+    } else {
+      return next(errorHandler(402, "Can't Update Comment right Now"));
+    }
+  } catch (error) {
+    next(error);
+  }
+};
