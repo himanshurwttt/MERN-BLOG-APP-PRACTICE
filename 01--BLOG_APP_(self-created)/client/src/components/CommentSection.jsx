@@ -67,12 +67,9 @@ export default function CommentSection({ postId }) {
 
   const handleDelete = async (commentId) => {
     try {
-      const res = await fetch(
-        `/api/comment/delete/${commentId}/${currentUser._id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const res = await fetch(`/api/comment/delete/${commentId}`, {
+        method: "DELETE",
+      });
       if (res.ok) {
         setPostComments((prevComments) =>
           prevComments.filter((comment) => comment._id !== commentId)

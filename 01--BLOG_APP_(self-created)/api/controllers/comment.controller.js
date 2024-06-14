@@ -142,41 +142,34 @@ export const edit = async (req, res, next) => {
 };
 
 export const CommentDelete = async (req, res, next) => {
-  console.log("delete hit");
   try {
-    const { commentId } = req.params; // Get commentId from request parameters
-    const { id: authUserId, email: authUserEmail } = req.user; // Get authenticated user details from req.user
+    let user;
 
-    // Fetch the authenticated user from the database
-    console.log("delete start");
-    const authenticatedUser = await User.findById(authUserId);
-
-    // Check if the authenticated user exists
-    if (!authenticatedUser) {
-      return next(errorHandler(403, "User not authenticated"));
+    // Fetch user by ID if available, otherwise fetch by email
+    if (req.user.id) {
+      user = await User.findById(req.user.id);
+    } else if (req.user.email) {
+      user = await User.findOne({ email: req.user.email });
     }
 
-    // Fetch the comment and populate its userId to get the comment owner details
-    const comment = await Comment.findById(commentId).populate("userId");
+    if (!user) {
+      return next(errorHandler(403, "User not found"));
+    }
+
+    const comment = await Comment.findById(req.params.commentId);
+
     if (!comment) {
       return next(errorHandler(404, "Comment not found"));
     }
 
-    const commentOwner = comment.userId; // Get the owner of the comment
-
-    // Check if the authenticated user is either the owner of the comment or an admin
-    if (
-      commentOwner._id.toString() !== authUserId.toString() && // Check if comment owner ID matches authenticated user ID
-      commentOwner.email !== authUserEmail && // Check if comment owner email matches authenticated user email
-      !authenticatedUser.isAdmin // Check if the authenticated user is an admin
-    ) {
+    // Check if the user is the owner of the comment or an admin
+    if (comment.userId.toString() !== user._id.toString() && !user.isAdmin) {
       return next(
         errorHandler(403, "You are not allowed to delete this comment")
       );
     }
 
-    // If the user has permission, delete the comment
-    await Comment.findByIdAndDelete(commentId);
+    await Comment.findByIdAndDelete(req.params.commentId);
     res.status(200).json("Comment deleted successfully");
   } catch (error) {
     return next(error);
