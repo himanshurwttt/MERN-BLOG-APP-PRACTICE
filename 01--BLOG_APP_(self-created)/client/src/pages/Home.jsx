@@ -1,85 +1,10 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const posts = [
-  {
-    title: "Mastering React Hooks: A Comprehensive Guide",
-    excerpt:
-      "Dive deep into the world of React Hooks and learn how to leverage them to build powerful and efficient web applications.",
-    image: "/placeholder.svg",
-    date: "2023-06-01",
-  },
-  {
-    title: "Optimizing Web Performance: Strategies and Techniques",
-    excerpt:
-      "Discover effective strategies and techniques to optimize the performance of your web applications, ensuring a seamless user experience.",
-    image: "/placeholder.svg",
-    date: "2023-05-15",
-  },
-  {
-    title: "Exploring the Latest CSS Features for Modern Web Design",
-    excerpt:
-      "Stay ahead of the curve and learn about the newest CSS features that can elevate your web designs to the next level.",
-    image: "/placeholder.svg",
-    date: "2023-04-30",
-  },
-  {
-    title:
-      "Building Scalable and Maintainable Web Applications with TypeScript",
-    excerpt:
-      "Dive into the world of TypeScript and learn how it can help you build more robust, scalable, and maintainable web applications.",
-    image: "/placeholder.svg",
-    date: "2023-04-15",
-  },
-  {
-    title: "Mastering Server-Side Rendering with Next.js",
-    excerpt:
-      "Explore the power of Next.js and learn how to leverage server-side rendering to create lightning-fast and SEO-friendly web applications.",
-    image: "/placeholder.svg",
-    date: "2023-03-31",
-  },
-  {
-    title: "Unleashing the Power of Headless CMS for Web Development",
-    excerpt:
-      "Discover the benefits of using a headless CMS and how it can streamline your web development workflow and deliver exceptional user experiences.",
-    image: "/placeholder.svg",
-    date: "2023-03-15",
-  },
-].sort((a, b) => new Date(b.date) - new Date(a.date));
-
 export default function Home() {
-  // const [posts, setPosts] = useState([]);
-  // const [fetchError, setFetchError] = useState(null);
-  // const [fetchProcess, setFetchProcess] = useState(false);
-
-  // const fetchData = async () => {
-  //   setFetchProcess(true);
-  //   try {
-  //     const res = await fetch("/api/post/getpost");
-  //     const data = await res.json();
-  //     if (!res.ok) {
-  //       console.log("something went wrong");
-  //       setFetchError(
-  //         "Something went wrong please try again or 'Referesh the page'"
-  //       );
-  //       setFetchProcess(false);
-  //     } else {
-  //       console.log(data.post.slug);
-  //       setPosts(data.post);
-  //       setFetchProcess(false);
-  //     }
-  //   } catch (error) {
-  //     setFetchProcess(false);
-  //     console.log("An error occurred:", error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
   return (
-    <div className="flex flex-col min-h-[100dvh]">
-      <main className="flex-1 m-auto">
+    <div className="flex flex-col min-h-[100vh]">
+      <main className="flex-1 m-auto bg-blue-100">
         <section className="w-full py-12 md:py-24 lg:py-8 ">
           <div className="container px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
@@ -95,7 +20,7 @@ export default function Home() {
                 </div>
                 <Link
                   to={"/posts"}
-                  className="inline-flex h-10 items-center justify-center rounded-md bg-gray-900 px-8 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50 dark:bg-gray-50 dark:text-gray-900 dark:hover:bg-gray-50/90 dark:focus-visible:ring-gray-300"
+                  className="inline-flex h-10 items-center justify-center rounded-md bg-gray-900 px-8 text-sm font-medium text-gray-50 shadow transition-colors hover:bg-gray-900/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-950 disabled:pointer-events-none disabled:opacity-50  active:scale-[0.98] scale-[1] duration-150"
                   prefetch={false}
                 >
                   Read the Blogs
@@ -124,36 +49,10 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            {/* <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 py-12 sm:grid-cols-2 lg:grid-cols-3">
-              {posts.map((post, index) => (
-                <div key={index} className="border-0 rounded-none shadow-none">
-                  <div className="p-0">
-                    <img
-                      src="/placeholder.svg"
-                      width={400}
-                      height={225}
-                      alt={post.title}
-                      className="object-cover aspect-video"
-                    />
-                  </div>
-                  <div className="grid gap-2 p-4">
-                    <div className="space-y-1">
-                      <h3 className="text-xl font-bold">{post.title}</h3>
-                      <p className="text-gray-500 dark:text-gray-400 line-clamp-2">
-                        {post.excerpt}
-                      </p>
-                    </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                      {new Date(post.date).toLocaleDateString()}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div> */}
           </div>
         </section>
       </main>
-      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
+      <footer className="flex flex-col gap-2 sm:flex-row py-8 w-full shrink-0 items-center px-4 md:px-6 border-t">
         <p className="text-xs text-gray-500 dark:text-gray-400">
           &copy; 2024 Acme Blog. All rights reserved.
         </p>
