@@ -102,6 +102,7 @@ export const commentLike = async (req, res, next) => {
     res.status(200).json(comment);
   } catch (error) {
     res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -137,5 +138,47 @@ export const edit = async (req, res, next) => {
     }
   } catch (error) {
     next(error);
+  }
+};
+
+export const CommentDelete = async (req, res, next) => {
+  console.log("delete hit");
+  try {
+    const { commentId } = req.params; // Get commentId from request parameters
+    const { id: authUserId, email: authUserEmail } = req.user; // Get authenticated user details from req.user
+
+    // Fetch the authenticated user from the database
+    console.log("delete start");
+    const authenticatedUser = await User.findById(authUserId);
+
+    // Check if the authenticated user exists
+    if (!authenticatedUser) {
+      return next(errorHandler(403, "User not authenticated"));
+    }
+
+    // Fetch the comment and populate its userId to get the comment owner details
+    const comment = await Comment.findById(commentId).populate("userId");
+    if (!comment) {
+      return next(errorHandler(404, "Comment not found"));
+    }
+
+    const commentOwner = comment.userId; // Get the owner of the comment
+
+    // Check if the authenticated user is either the owner of the comment or an admin
+    if (
+      commentOwner._id.toString() !== authUserId.toString() && // Check if comment owner ID matches authenticated user ID
+      commentOwner.email !== authUserEmail && // Check if comment owner email matches authenticated user email
+      !authenticatedUser.isAdmin // Check if the authenticated user is an admin
+    ) {
+      return next(
+        errorHandler(403, "You are not allowed to delete this comment")
+      );
+    }
+
+    // If the user has permission, delete the comment
+    await Comment.findByIdAndDelete(commentId);
+    res.status(200).json("Comment deleted successfully");
+  } catch (error) {
+    return next(error);
   }
 };

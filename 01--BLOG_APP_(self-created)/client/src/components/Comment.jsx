@@ -7,16 +7,13 @@ import { useSelector } from "react-redux";
 import { RxCross2 } from "react-icons/rx";
 import moment from "moment";
 
-export default function Comment({ comment, refetchComments }) {
+export default function Comment({ comment, refetchComments, handleDelete }) {
   const { currentUser } = useSelector((state) => state.user);
   const [commentUser, setCommentUser] = useState("");
   const [commentError, setCommentError] = useState(null);
   const [edit, setEdit] = useState(false);
   const [content, setContent] = useState(comment.content);
   const [editContent, setEditContent] = useState(comment.content);
-
-  console.log(editContent);
-  console.log(content);
 
   const fetchCommentUsers = async () => {
     try {
@@ -161,7 +158,10 @@ export default function Comment({ comment, refetchComments }) {
                 ))}
               {(currentUser._id === comment.userId || currentUser.isAdmin) &&
                 (!edit ? (
-                  <MdDelete className="cursor-pointer active:scale-[0.95] scale-[1.1] duration-100" />
+                  <MdDelete
+                    onClick={() => handleDelete(comment._id)}
+                    className="cursor-pointer active:scale-[0.95] scale-[1.1] duration-100"
+                  />
                 ) : (
                   <RxCross2
                     onClick={handleCancelEdit}

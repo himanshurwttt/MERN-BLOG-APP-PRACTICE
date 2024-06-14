@@ -65,6 +65,27 @@ export default function CommentSection({ postId }) {
     fetchComments();
   };
 
+  const handleDelete = async (commentId) => {
+    try {
+      const res = await fetch(
+        `/api/comment/delete/${commentId}/${currentUser._id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (res.ok) {
+        setPostComments((prevComments) =>
+          prevComments.filter((comment) => comment._id !== commentId)
+        );
+      } else {
+        const data = await res.json();
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div className=" h-full max-w-lg m-auto my-3">
@@ -125,6 +146,7 @@ export default function CommentSection({ postId }) {
               key={comment._id}
               comment={comment}
               refetchComments={refetchComments}
+              handleDelete={() => handleDelete(comment._id)}
             />
           ))
         ) : (
