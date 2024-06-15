@@ -146,14 +146,6 @@ export default function Header() {
                             </Link>
                           )}
 
-                          {/* <Link to={"/dashboard?tab=posts"}>
-                            <p
-                              onClick={handleProfileBox}
-                              className="p-1 py-2 rounded-md hover:bg-white hover:text-black duration-200"
-                            >
-                              Posts
-                            </p>
-                          </Link> */}
                           <Link>
                             <p
                               onClick={handleSignOut}
