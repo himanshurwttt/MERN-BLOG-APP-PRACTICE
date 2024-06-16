@@ -48,3 +48,37 @@
 .content h1 {
   font-size: 6vw;
 }
+
+.custom-scrollbar {
+  scroll-behavior: smooth; /* Enables smooth scrolling */
+}
+
+/* Custom scrollbar for Webkit browsers */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+  scrollbar-width: thin;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgb(0, 60, 139);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #000000;
+}
+
+/* Custom scrollbar for Firefox */
+.custom-scrollbar {
+  scrollbar-track-color: transparent;
+  scrollbar-thumb-color: #020202;
+}
+
+.custom-scrollbar::-moz-scrollbar-thumb {
+  border-radius: 6px; /* Rounded corners of the thumb for Firefox */
+}

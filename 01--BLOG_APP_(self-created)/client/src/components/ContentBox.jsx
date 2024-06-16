@@ -3,8 +3,6 @@ import { FaLongArrowAltRight } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function ContentBox({ post }) {
-  const mainBox = useRef();
-
   return (
     <div
       ref={mainBox}

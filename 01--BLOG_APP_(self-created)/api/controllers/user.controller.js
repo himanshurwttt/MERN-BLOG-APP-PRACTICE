@@ -50,10 +50,10 @@ export const getUsers = async (req, res, next) => {
   } else if (req.user.email) {
     user = await User.findOne({ email: req.user.email });
   }
-
   if (!user) {
     return next(errorHandler(403, "User not found"));
   }
+
   try {
     if (!user.isAdmin) {
       return next(errorHandler(401, "Admin required to fetch all users"));
@@ -67,6 +67,30 @@ export const getUsers = async (req, res, next) => {
       });
 
       res.status(200).json({ users: usersWithoutPassword, noOfUsers });
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const deleteUser = async (req, res, next) => {
+  let user;
+  if (req.user.id) {
+    user = await User.findById(req.user.id);
+  } else if (req.user.email) {
+    user = await User.findOne({ email: req.user.email });
+  }
+  if (!user) {
+    return next(errorHandler(403, "User not found"));
+  }
+  try {
+    if (!user.isAdmin) {
+      return next(errorHandler(401, "Admin required to fetch all users"));
+    } else {
+      const { userId } = req.params;
+
+      await User.findByIdAndDelete(userId);
+      res.status(200).json("User Deleted Successfully");
     }
   } catch (error) {
     return next(error);

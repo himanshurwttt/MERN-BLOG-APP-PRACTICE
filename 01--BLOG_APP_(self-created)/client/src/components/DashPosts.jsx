@@ -37,8 +37,8 @@ export default function DashPosts() {
     fetchData();
   }, []);
   return (
-    <div className="w-full max-w-screen-xl h-[90vh] overflow-hidden z-10 ">
-      <div className=" flex flex-wrap w-full justify-around h-full overflow-y-auto ">
+    <div className="w-full max-w-screen-xl h-[90vh] overflow-hidden z-10 p-6">
+      <div className=" flex flex-wrap w-full justify-around h-full overflow-y-auto custom-scrollbar ">
         {fetchProcess
           ? <LoadingSpinner /> || (
               <h1 className="font-[500]"> No Post Available</h1>
