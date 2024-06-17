@@ -82,13 +82,11 @@ export const deleteUser = async (req, res, next) => {
     return next(errorHandler(403, "User not found"));
   }
   try {
-    if (!user.isAdmin) {
-      return next(errorHandler(401, "Admin required to fetch all users"));
-    } else {
-      const { userId } = req.params;
-
-      await User.findByIdAndDelete(userId);
+    if (user._id.toString() === req.params.userId || user.isAdmin) {
+      await User.findByIdAndDelete(req.params.userId);
       res.status(200).json("User Deleted Successfully");
+    } else {
+      return next(errorHandler(401, "Admin required to delete other users"));
     }
   } catch (error) {
     return next(error);

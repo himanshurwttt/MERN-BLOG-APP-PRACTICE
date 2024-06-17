@@ -102,23 +102,23 @@ export default function AllPosts() {
           )}
         </div>
       )}
-      <div className="w-full flex flex-row justify-center items-center gap-3">
+      <div className="w-full flex flex-row justify-center items-center gap-3 mt-3">
         <button
           onClick={showPrev}
           disabled={index == 0}
-          className="flex flex-row justify-center items-center gap-2  bg-blue-800 rounded-md p-1 text-white text-sm font-[400] px-2 drop-shadow-lg"
+          className="flex flex-row justify-center items-center gap-2  bg-blue-800 rounded-md py-2 text-white text-sm font-[400] px-3 drop-shadow-lg"
         >
           <FaArrowLeft /> previous
         </button>
         <button
           disabled={posts.length < 8}
           onClick={handleShowMore}
-          className="flex flex-row justify-center items-center gap-2 bg-blue-800 rounded-md py-1 text-white text-sm font-[400] px-2 drop-shadow-lg"
+          className="flex flex-row justify-center items-center gap-2 bg-blue-800 rounded-md py-2 text-white text-sm font-[400] px-3 drop-shadow-lg"
         >
           show more <FaArrowRight />
         </button>
       </div>
-      <footer className="flex flex-col gap-2 sm:flex-row py-8 w-full shrink-0 items-center px-4 md:px-6 border-t">
+      <footer className="flex flex-col gap-2 sm:flex-row py-3 w-full shrink-0 items-center px-4 md:px-3 border-t">
         <p className="text-xs text-gray-500 dark:text-gray-400">
           &copy; 2024 Acme Blog. All rights reserved.
         </p>

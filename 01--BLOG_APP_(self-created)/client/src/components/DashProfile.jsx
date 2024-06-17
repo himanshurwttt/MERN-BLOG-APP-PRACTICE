@@ -1,9 +1,11 @@
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signOutSuccess } from "../redux/user/userSlice";
 
 export default function DashProfile() {
+  const navigate = useNavigate();
+  const [deleteModal, setDeleteModal] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -23,8 +25,26 @@ export default function DashProfile() {
     }
   };
 
+  const handleDeleteUser = async () => {
+    try {
+      const res = await fetch(`/api/user/deleteuser/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (res.ok) {
+        navigate("/");
+        dispatch(signOutSuccess());
+        handleSignOut();
+      } else {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div className="w-full m-auto ">
+    <div className="w-full m-auto h-[90vh] ">
       <div className="w-full  m-auto h-full  flex justify-center ">
         <div className="box w-full p-2 md:w-[70%]">
           <div className="img   rounded-full my-5 flex justify-center items-center ">
@@ -64,6 +84,33 @@ export default function DashProfile() {
                 readOnly
               />
             </div>
+            <div className="flex justify-end">
+              <Link
+                onClick={() => setDeleteModal(true)}
+                className="text-red-600 font-[500] text-sm"
+              >
+                Delete Account?
+              </Link>
+            </div>
+            {deleteModal && (
+              <div className="  max-w-xs w-full m-auto p-2 rounded-md bg-gray-100 drop-shadow-lg">
+                <p className="text-lg text-center font-[500]">Are You sure?</p>
+                <div className="flex flex-row gap-2 justify-center mt-3">
+                  <button
+                    onClick={() => setDeleteModal(false)}
+                    className="bg-gray-600 text-white py-1 rounded-md drop-shadow-md px-3"
+                  >
+                    cancel
+                  </button>
+                  <button
+                    onClick={handleDeleteUser}
+                    className="bg-red-500 text-white py-1 rounded-md drop-shadow-md px-3"
+                  >
+                    Yes
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
           <div className="buttons flex flex-col md:flex-row gap-5">
             <div className="update w-full">
