@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import DashProfile from "../components/DashProfile";
 import DashPosts from "../components/DashPosts";
-import DashComments from "../components/DashComments";
+// import DashComments from "../components/DashComments";
 import DashSideBar from "../components/DashSideBar";
 import { useSelector } from "react-redux";
-import DashComp from "../components/DashComp";
+// import DashComp from "../components/DashComp";
 import DashUsers from "../components/DashUsers";
 import UpdateProfile from "../components/UpdateProfile";
 
@@ -33,9 +33,8 @@ export default function DashBoard() {
             </div>
           )}
           {tab === "profile" && <DashProfile />}
-          {tab === "dashboardComp" && <DashComp />}
+          {/* {tab === "dashboardComp" && <DashComp />} */}
           {tab === "posts" && <DashPosts />}
-          {tab === "comments" && <DashComments />}
           {tab === "users" && <DashUsers />}
           {tab === "updateprofile" && <UpdateProfile />}
         </div>

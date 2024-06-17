@@ -136,7 +136,7 @@ export default function Header() {
                         </div>
                         <div className="flex flex-col text-xs font-[500] gap-1">
                           {currentUser.isAdmin && (
-                            <Link to={"/dashboard?tab=dashboardComp"}>
+                            <Link to={"/dashboard?tab=profile"}>
                               <p
                                 onClick={handleProfileBox}
                                 className="p-1 py-2 rounded-md hover:bg-white hover:text-black duration-200"

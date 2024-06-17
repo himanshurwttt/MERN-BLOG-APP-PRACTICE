@@ -3,8 +3,6 @@ import errorHandler from "../utils/error.js";
 
 export const test = async (req, res, next) => {
   console.log("successfully done");
-  const user = await User.findById({ _id: "665c125bd9addc9e76dcf535" });
-  console.log(user);
 };
 
 export const updateUser = async (req, res, next) => {

@@ -39,7 +39,7 @@ export const createPost = async (req, res, next) => {
 export const getPost = async (req, res, next) => {
   try {
     const startIndex = parseInt(req.query.startIndex) || 0;
-    const limit = parseInt(req.query.limit) || 9;
+    const limit = parseInt(req.query.limit) || 8;
     const sortDirection = req.query.order == "asc" ? 1 : -1;
     const post = await Post.find({
       ...(req.query.postId && { _id: req.query.postId }),
@@ -109,7 +109,6 @@ export const deletePost = async (req, res, next) => {
   const User2 = await User.findOne({ email: req.user.email });
   // console.log(User2);
   const post = await Post.findById(req.params.postId);
-  console.log(post);
   const postUser = await Post.findOne({ userId: User2._id });
   const userAdmin = await User.findById(post.userId);
 

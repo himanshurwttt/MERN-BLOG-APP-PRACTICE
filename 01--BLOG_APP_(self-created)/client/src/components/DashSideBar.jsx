@@ -32,7 +32,7 @@ export default function Component() {
       </div>
       <nav className="flex-1 py-4 ">
         <ul className="space-y-1 flex flex-row md:flex-col w-full justify-around">
-          <li>
+          {/* <li>
             <Link
               className="flex items-center gap-3 px-4 py-2 text-sm font-medium hover:bg-blue-800 active:bg-blue-700 rounded-lg w-full h-full"
               to={"/dashboard?tab=dashboardComp"}
@@ -40,7 +40,7 @@ export default function Component() {
               <LayoutDashboardIcon className="w-5 h-5" />
               <span className="hidden md:inline">dashboard</span>
             </Link>
-          </li>
+          </li> */}
           {currentUser.isAdmin == true && (
             <li>
               <Link
@@ -71,15 +71,7 @@ export default function Component() {
               <span className="hidden md:inline">Posts</span>
             </Link>
           </li>
-          <li>
-            <Link
-              className="flex items-center gap-3 px-4 py-2 text-sm font-medium hover:bg-blue-800 active:bg-blue-700 rounded-lg w-full h-full"
-              to={"/dashboard?tab=comments"}
-            >
-              <MessageCircleIcon className="w-5 h-5" />
-              <span className="hidden md:inline">Comments</span>
-            </Link>
-          </li>
+
           <li>
             <button
               onClick={handleSignOut}
